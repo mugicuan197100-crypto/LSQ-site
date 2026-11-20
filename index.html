@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="张三的个人名片 —— 前端开发者">
+  <title>张三 · 前端开发者</title>
+  <style>
+    :root {
+      --bg: #070a10;
+      --surface: rgba(18, 23, 34, 0.72);
+      --surface-strong: #121722;
+      --text: #f3f6fb;
+      --muted: #98a4ba;
+      --subtle: #6e7a90;
+      --line: rgba(255, 255, 255, 0.09);
+      --line-strong: rgba(255, 255, 255, 0.16);
+      --cyan: #6ee7f5;
+      --violet: #a78bfa;
+      --green: #5eead4;
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      color-scheme: dark;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+      color: var(--text);
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse 55% 45% at 18% 12%, rgba(110, 231, 245, 0.11), transparent 62%),
+        radial-gradient(ellipse 50% 50% at 85% 88%, rgba(167, 139, 250, 0.13), transparent 65%),
+        linear-gradient(160deg, #070a10 0%, #0a0e17 48%, #080b12 100%);
+      font-family: "Inter", "HarmonyOS Sans SC", "PingFang SC",
+        "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* 背景网格与光晕 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, #000 15%, transparent 78%);
+      -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, #000 15%, transparent 78%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      right: -150px;
+      top: -180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(110, 231, 245, 0.12), transparent 68%);
+      filter: blur(24px);
+      pointer-events: none;
+    }
+
+    .page {
+      position: relative;
+      width: 100%;
+      max-width: 700px;
+      min-width: 0;
+      flex: 0 1 700px;
+      z-index: 1;
+    }
+
+    .page::before,
+    .page::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(2px);
+    }
+
+    .page::before {
+      width: 6px;
+      height: 6px;
+      top: 7%;
+      left: -42px;
+      background: var(--cyan);
+      box-shadow: 0 0 18px 3px rgba(110, 231, 245, 0.55);
+    }
+
+    .page::after {
+      width: 4px;
+      height: 4px;
+      right: -34px;
+      bottom: 14%;
+      background: var(--violet);
+      box-shadow: 0 0 16px 3px rgba(167, 139, 250, 0.55);
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: 46px 50px 34px;
+      background:
+        linear-gradient(150deg, rgba(255, 255, 255, 0.045), transparent 42%),
+        var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.07) inset,
+        0 34px 90px -28px rgba(0, 0, 0, 0.9),
+        0 0 100px -45px rgba(110, 231, 245, 0.35);
+      animation: card-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+
+    /* 卡片顶部渐隐光线 */
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 12%;
+      right: 12%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(110, 231, 245, 0.75), rgba(167, 139, 250, 0.65), transparent);
+    }
+
+    /* 右上角微光 */
+    .card__glow {
+      position: absolute;
+      top: -170px;
+      right: -140px;
+      width: 380px;
+      height: 380px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(167, 139, 250, 0.14), transparent 66%);
+      pointer-events: none;
+    }
+
+    .profile {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+
+    .avatar {
+      position: relative;
+      flex: 0 0 auto;
+      width: 92px;
+      height: 92px;
+      display: grid;
+      place-items: center;
+      border-radius: 28px;
+      background:
+        linear-gradient(145deg, rgba(110, 231, 245, 0.22), rgba(167, 139, 250, 0.2)),
+        #141b28;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow:
+        0 0 0 7px rgba(255, 255, 255, 0.025),
+        0 18px 45px -16px rgba(110, 231, 245, 0.35);
+    }
+
+    .avatar::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border-radius: 22px;
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+    }
+
+    .avatar span {
+      position: relative;
+      font-size: 40px;
+      font-weight: 650;
+      line-height: 1;
+      background: linear-gradient(135deg, #e9fdff 5%, var(--cyan) 44%, var(--violet) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.04em;
+      transform: translateY(-1px);
+    }
+
+    .identity {
+      min-width: 0;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: var(--subtle);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(94, 234, 212, 0.1);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    h1 {
+      font-size: clamp(34px, 6vw, 46px);
+      font-weight: 650;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+    }
+
+    .role {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 15px;
+      letter-spacing: 0.02em;
+    }
+
+    .role::before {
+      content: "";
+      width: 22px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--cyan), rgba(110, 231, 245, 0.15));
+    }
+
+    .divider {
+      height: 1px;
+      margin: 34px 0 30px;
+      background: linear-gradient(90deg, transparent, var(--line-strong) 18%, var(--line) 82%, transparent);
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      color: var(--subtle);
+    }
+
+    .section-label span {
+      font-variant-numeric: tabular-nums;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 10px;
+      color: rgba(110, 231, 245, 0.72);
+      letter-spacing: 0.08em;
+    }
+
+    .about-text {
+      max-width: 540px;
+      color: #b8c2d4;
+      font-size: 15.5px;
+      line-height: 1.9;
+      letter-spacing: 0.015em;
+    }
+
+    .about-text strong {
+      color: var(--text);
+      font-weight: 550;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 16px 9px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.028);
+      color: #d7deea;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      cursor: default;
+      transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .tag svg {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      fill: none;
+      transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .tag--react {
+      color: #a9e9f5;
+    }
+
+    .tag--python {
+      color: #c8c2ff;
+    }
+
+    .tag--design {
+      color: #a8f0dc;
+    }
+
+    .tag:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .tag--react:hover {
+      border-color: rgba(110, 231, 245, 0.42);
+      box-shadow: 0 10px 24px -12px rgba(110, 231, 245, 0.6);
+    }
+
+    .tag--python:hover {
+      border-color: rgba(167, 139, 250, 0.45);
+      box-shadow: 0 10px 24px -12px rgba(167, 139, 250, 0.65);
+    }
+
+    .tag--design:hover {
+      border-color: rgba(94, 234, 212, 0.42);
+      box-shadow: 0 10px 24px -12px rgba(94, 234, 212, 0.55);
+    }
+
+    .tag:hover svg {
+      transform: rotate(-8deg) scale(1.08);
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .card-footer p {
+      color: var(--subtle);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+    }
+
+    .card-footer .line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--line), transparent);
+    }
+
+    .monogram {
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      color: rgba(255, 255, 255, 0.34);
+    }
+
+    @keyframes card-in {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 0 4px rgba(94, 234, 212, 0.1);
+      }
+      50% {
+        opacity: 0.55;
+        box-shadow: 0 0 0 7px rgba(94, 234, 212, 0.04);
+      }
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 24px 16px;
+      }
+
+      .page::before,
+      .page::after {
+        display: none;
+      }
+
+      .card {
+        padding: 34px 26px 26px;
+        border-radius: 24px;
+      }
+
+      .profile {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .avatar {
+        width: 76px;
+        height: 76px;
+        border-radius: 23px;
+      }
+
+      .avatar::before {
+        border-radius: 18px;
+      }
+
+      .avatar span {
+        font-size: 33px;
+      }
+
+      .divider {
+        margin: 26px 0 24px;
+      }
+
+      .about-text {
+        font-size: 15px;
+        line-height: 1.85;
+      }
+
+      .tag {
+        padding: 8px 14px 8px 11px;
+        font-size: 13px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card,
+      .status-dot {
+        animation: none;
+      }
+
+      .tag,
+      .tag svg {
+        transition: none;
+      }
+    }
+
+    ::selection {
+      background: rgba(110, 231, 245, 0.24);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <main class="card" aria-labelledby="name">
+      <div class="card__glow" aria-hidden="true"></div>
+
+      <header class="profile">
+        <div class="avatar" aria-hidden="true">
+          <span>张</span>
+        </div>
+        <div class="identity">
+          <div class="eyebrow">
+            <span class="status-dot" aria-hidden="true"></span>
+            个人名片
+          </div>
+          <h1 id="name">张三</h1>
+          <p class="role">前端开发者</p>
+        </div>
+      </header>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <section class="section" aria-labelledby="about-title">
+        <h2 class="section-label" id="about-title">
+          <span>01</span>
+          关于我
+        </h2>
+        <p class="about-text">
+          你好，我是张三。一名热爱构建界面的<strong>前端开发者</strong>，
+          喜欢把复杂的想法变成简洁、好用的产品。关注交互与视觉细节，
+          也享受用代码解决问题、持续学习的过程。
+        </p>
+      </section>
+
+      <section class="section" aria-labelledby="skills-title">
+        <h2 class="section-label" id="skills-title">
+          <span>02</span>
+          技能标签
+        </h2>
+        <ul class="skills">
+          <li class="tag tag--react">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="1.9"></circle>
+              <ellipse cx="12" cy="12" rx="9.2" ry="3.7"></ellipse>
+              <ellipse cx="12" cy="12" rx="9.2" ry="3.7" transform="rotate(60 12 12)"></ellipse>
+              <ellipse cx="12" cy="12" rx="9.2" ry="3.7" transform="rotate(120 12 12)"></ellipse>
+            </svg>
+            React
+          </li>
+          <li class="tag tag--python">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3.2c-4 0-4.7 1.4-4.7 3.4v2.3h4.9v.8H5.8c-1.9 0-3.1 1.2-3.1 3.7s1.2 3.7 3.1 3.7h1.7v-2.4c0-2 1.4-3.5 3.4-3.5h3.9c1.6 0 2.8-1.1 2.8-2.8V6.6c0-2-1.8-3.4-4.4-3.4H12z"></path>
+              <path d="M12 20.8c4 0 4.7-1.4 4.7-3.4v-2.3H11.8v-.8h6.4c1.9 0 3.1-1.2 3.1-3.7s-1.2-3.7-3.1-3.7h-1.7v2.4c0 2-1.4 3.5-3.4 3.5H8.9c-1.6 0-2.8 1.1-2.8 2.8v2.8c0 2 1.8 3.4 4.4 3.4H12z"></path>
+            </svg>
+            Python
+          </li>
+          <li class="tag tag--design">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3.2 20.8 12 12 20.8 3.2 12 12 3.2z"></path>
+              <circle cx="12" cy="12" r="2.7"></circle>
+              <path d="M12 6.5v2.8M17.5 12h-2.8M12 17.5v-2.8M6.5 12h2.8"></path>
+            </svg>
+            设计
+          </li>
+        </ul>
+      </section>
+
+      <footer class="card-footer">
+        <p>用设计思考，用代码实现</p>
+        <span class="line" aria-hidden="true"></span>
+        <span class="monogram" aria-hidden="true">ZS / 2026</span>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

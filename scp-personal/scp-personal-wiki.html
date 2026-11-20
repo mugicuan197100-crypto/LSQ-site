@@ -1,0 +1,2649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCP基金会 · 个人站</title>
+<meta name="description" content="一个可以自己编辑的 SCP 基金会风格个人维基：单文件、无外部依赖、数据保存在浏览器本地。">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="%23700" stroke-width="12"/><path d="M50 20v36M34 44l16 16 16-16" fill="none" stroke="%23700" stroke-width="12"/></svg>'>
+<style>
+/* ============================================================
+   SCP Sigma-9 (复刻版)
+   原始主题：Aelanna / Dr Devan / MScarlet / Sekai_s
+   本文件为个人本地站点复刻，不含任何外部依赖
+   ============================================================ */
+
+/* ---------------- 基础 ---------------- */
+[hidden] { display: none !important; }
+*, *::before, *::after { box-sizing: border-box; }
+html { background: #fff; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #333;
+  font-family: Verdana, "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  font-size: 80%;
+  line-height: 1.41;
+}
+a { color: #b01; text-decoration: none; background: transparent; }
+a:visited { color: #824; }
+a:hover { text-decoration: underline; background-color: transparent; }
+p { margin: .8em 0; }
+h1, h2, h3, h4, h5, h6 { font-weight: bold; }
+ul { list-style: square; }
+kbd {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  background: #f7f7f7;
+  padding: 0 4px;
+  font-family: inherit;
+  font-size: 90%;
+  line-height: 1.4;
+}
+code, pre { font-family: Consolas, "Courier New", monospace; }
+code { background: #f4f4f4; padding: 0 3px; }
+img { max-width: 100%; }
+
+/* ---------------- 头部 ---------------- */
+#container-wrap {
+  min-height: 100vh;
+  background: #fff url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAGQCAIAAADX9FK4AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAHwxJREFUeNrsXWuTVEdyrXOHBQEDrBACvVawkhW2QuuIDUes16E/4L/gj/5v+8F/zq+QgIEBcTzTtzLzZN5u3ERAKATZQjDV0497T2VlZZ581Lh3ejrk0cPXDBuCxqvxarx+U8OGoAWq8Wq8Gq9W8C1QDUHj1Xg1Xq3gW6B62BA0Xo1XK/gWqMarhw1B49UKvgWq8Wq8etgQtIJvgWq8Gq/Gq4cNQQtU49V4NV6t4FugGoLGq/FqvFrBt0D1sCFovBqvVvAtUI1XDxuCxqsVfAtU49V49bAhaAXfAtV4NV6NVw8bgjcQKIzx6ekpdj+gh68djgW4+HP/1q31hx6+ZjgaguOH48qy+J/Pbt/u4WuG+PzOnf98/FhVWg8PDU/OX7680GFn5+erDrv4oYeHhrh25UqLzJFDfPS73zUiRw5x/erVRuTIIR7evduIHDnE6bVrn5ye/pc81cNDQ9z+6KNG5Mgh7ly/3ogcOcTHN240IkcO8d2DB43IkcOTC//w3q1bz168wO5x8UMPDw3x6a1bLTLHKvgHt283Iscq+M/v3PGn7t68+d9PnvTw0BB/+vLLRuTIIb76+ONG5Mghvr57txE5cohHn3zSiBw5xDf37jUixyr4f370qBE5VsF/d//+xzdv/o881cNDQ/z9gweNyJFDfP/ZZ43IkUP88PnnjciRw5Pvv/ji+cuXq1N98cPd09MeHhqe/P769cunjIW4+KGHh4b48x/+0EvsWAX/T19/vT71+5s3/1de0cPtEH95+LAROXKIf/3hh0bkyOHJp6enH2eV1sNDQ/z4zTctMkcOTx5+8slqRFzofLUpergdnjzagbU+dQHhubyih2V48uevv/anzvMreliGJ1/eudOIHDlcLv7/6ezs0oiwRw8PDU/+7tNPW2SOHJ58d/9+I3Lk8OQvjx41Iscq+Id3797JT/Xw0PDkHx48aESOHC7rUz+fnd2RLaCHe4cn33/2WYvMkcOTf/n220bkyOHJt/fuNSLHKvg/ffFFI9IK/h0o+H/88kuH8PbNmy8E0R6W4XJbIHx8dtbD1wwvjVKF8EVGtIc6XFpkjh8uyxgXf548fXrnxo315x4eHLbIHD9cbt+4kZ7q4eHh8vjZs/RUDw8PF4xxCeH1696epoeHhotDeCsj2sPtcPHeNE93ItfD1w1PrUZ67ESuh68ZLk+yyPXwNcNLBf/k7OyWqLQeHhouvcSOHy4NwfHDVvBvouAbguOHS0Nw/BD//uOP6083P/roYqf0F/VwO8S//fWv/tT1a9fOnj9/S8OrZ8/PY3j12tn54Re/u9++fljee/Xq2fn5a27hyouvvvLxi5EePSzDKyRHP457NFhvAtarV68ahQarl2FLVoPVYLXOahQarAarwfqtPJaGoCWrwWqwGqwGq8FqsNp0aMn6tR/4j7/97fKfAV7+N1bkMC5+uPwLu78nnLtn7Z80kF9iffn65stPAeZ8lO9IVzG/7+Kn3S/lFbsPRDzl4/lN863zH47yyt23zptZv2Hz9el+5An5/Pn3lXv371/+QMR1zm/xq1wvDaT9+vI3CaIEpUI+JnYTqXyh9Sox32x/r/c6XzPkpvM97SbjwB0baENgisvSr9793pCFfNO8qcsfrjz84yOfpXoHu9fskLQ5m8JiU2Y3lQBYL3DewZQVvwZuwBrwlwyM7X3DP66IWxJaE3O75R3U+S4Erd2Vjyn86Zt0JY16a/jpp5/mosGUMFs/9pFTJPI7fZ3Z01UE9MuS+MvNy/Mm2C4CgceIGTE0bK3HHMKmNJaiQyVXb5rBl4bPfFVAvuJFwha/Xq7QcH6C/XB5EYTfwBTiCW4W4fVFhM+R3Z9Lsr2E/ur0oDzFnb4kpy4C5LPm23f/MqSNEy7TYRgKGwyby4mKbyahV7JCGat1J0AmB0ssnfUD4TLvAknQFjoCUHLOIeMuVkwmuv5185OYV+qck/kypllCfCD9f9gFjmEXBBdcrriSskXMF3EucJvUvHvIRSHAsUmFziSWEctnrNNiaoA7rT6XKFfA6TpA5Qqq7+j7BU29z+myLwlh81lbAQoJMKnweyBsLQYMaYNTyZ1fiJhNV/H0ufAPCHBFd8LRWGX68vK5+IKBSpdu4bAFInsAQtNMdepytX4Wi9afU450iy5rO7w4sQPmUtbVs0Nr3STg76VMFfMMuvYI2WEsIbuRQMLQmRI1P452p6s6WMRQMWXkuoMui5haFqtyVJmmaamy1w2VWduYGMMQNpgwzAvgVKBTBuaeazKXZoH+3fN+XO1T7SFbNVBFsH4XTfqLFjX50qW4mAjFRjtUHcPMUhcGM/QQErmxMlcwhsw4Q+eiGhphzM5bgwsXY+ENt2BUy6ZtdkJvutf0wRh7cE67rw5lfyIDtt2Z2+sn647AqRSnuM/NZV40qEoStoQcIbl/yvpxqyTunb4ebNuzZeGLNtRyyJxsr2kfdiw4XLJ850CCGL7cYtNMxs60F+B7wFRBi26EYrzRdxyaVgxb2FdTktppFBSr2YHBSDuyCKRjz9D+jj/XpT9FJEwa0Bc2HVO4xVJ33nXRw2aTdVKnxUAk+wx6H+OyiGe3mEHb6nSN63eqTSMWkW3pCD05XNGt1wZbBC6Ic9vE3LRETGE2GXwT4bS5zFybusauKpaib5iolvBOe7ghrIIjO9DqYsQKZzw7X7vQFaXvLMg62kTV0UJo1VDP1A1q2HRTnWCYhRmfw3UPxLx8yhbvL5rfPncmmIrLIl2mFxgUIVslYhjKtPux+Q1dCrE0qNBNBV8kRufFjHYzQBBqwmWfcPGZkjy3I9nA1KAnHGW46mHYtci6W6RQjFeW9QOU/YWyc/gFi2QiJs1dJJvMMA2mtWPKa+HWUtFtgvErNyY5nQq/IZhr5JMHjOzq25W76sWqDO2rybHxIod7gm6lhL0ZKn6VlSGumMyy/UYs+zm7RLVwgvBQnmg6R5eLYBniMpiFkhUwk9lVPJZp6qsaCZ0F9Qpjz6uu/bSAphqnmomyjYi36yIhLMwg5Eo57SqKKxTKyO1rbKxfkwYUB3j3gsVWgNIK4RYhy/eQBWVq2GZ+bIw6Un0wdcpYbDLa/mLmlZgesY3OBUyq8+T2vGgJ8zmmMKp/hnBJ5ytcKYYDneTOjfwLCx5udpnCMykI6g75qp0zsP/EK9nu2SORfnId2Pns0LU2Qs59jzcfh8IFkXmVq9eJOcfTsQ0mUY1AuIcHdw/nd83t3dbe5DzXr/n555+bXH+D6A7KZgJVkUPdnsy7JOEOB8l/M7fJoA6qs5MEEdunwlIb0y1Ne3XetgeSp+ZvyW8otvxI1jLSa+2bY7wM4RPCRCpxCjeRhlCTJrAwZRr6LEzBeItTcj4J5F7aD/lzbCNj2ZhhZLmzHcm/cUKHSM5uspCYtEW4vUbBAmIhrToL4QKZiSQOiNuRmDc6pqpxignFSaXsx/S93m5HacokvIn7pHgg0yCDAxURCNP5oKragbphO+xJxyd/ZYyhtleosLCQFkJMJNtpyLQ+GMI11V4ysVnmrCpcBgEHqJ1qn4IMm8/IDjoY320Whs4LxEQCgjpSR32GEILAMOK2uqjpsoqbuUNlgZHa7vBTkacTQcHMMK0Vhmwa4SUusnj3Y6+tBuU/0zIPdoKZhhUTiUqiZRNpoBgqwUejWjfYxxshcT+X+/Wyx0RSAmtySywUkkSWQIkiRMgKyV1wktT1tftCVDYgXHbKtoJChdrKg7P9rkRC7pBsW4Rlq0YQPIhRHS1hVmmu7yLEbabBaFqSQ6mh4WaMW7n6vtDeZiKJ71mEg0Eumj032QbAYrkpCgYNafpdyAJgLJ4wkdxLCHY0HOQ5wR7xgmo5sSB3N7ZY8FVXR5Ccak6Kq+Kmr5BbDs+kZwCJEIjyLUYCk/OyshA7sjOFVU1vYij5bw4GKT9JUC5Z4KbvmB3V3WxCOI64PjVhd8AvJSAbFDPES/RwN40ZDUeC4s0FwUFZycX3GTl8jmJrSfRWyDRR4+aIUveW2CqqI0HbmJwGcU4sRfTgWzgFg6CLg4OPiLBbGUEihwsWwYWhyt6UXA1YUECAc8ZBjAWZgeBJc0hdjDZ6oMWoRqqwum9XDKpdFxmqgp/rE2LTDAlXAomnRlDmi9oXG4KEWztkvdA5UZxT5MExxHpB5BU4Dx+GtNMk8CmAc6j6Sg+zmAG2+t01VJfiUpoAEkw3zWqCm9cMGUZoRCYEhIdaOGIv4KjU+oZwsBCfR3uQ9mlbDZxhYMvSEA5gSj6NcENYJPCwmjm7U4JU/LjZuecnUBKFMofKCGtrmkjMYdhoaZaQo+ZY0mZbXKh40q6akXRlSpLVdYHwx7pqhIxGYZeEimWhJ5xJFNkfOcbPUbbYkQN5tkkDsmXHhbgwSVaDk/V2fzuYlpS9QVsLlEiXbBCI6DTm3p6tXERkQu5rjRfITTE+UayV9SWQwOuq58RzrbdaiUjxaMQENENwXgM9GYTMHgFyABuxUnavWoJOMm1OMDslHuUKMpQS9dQshjAlSebwL/VKzOCIPTFobzXdQzMHMUHbeiiOgrsuq3haTHeze8UFAXtI9DxzntkxUx4WUVMb69SpitVOBJJt757iECM6PKYaebB1hJIWg0gUoTjCogDWOaEkoLkXL25UhK8pQZqIwiGTQZFwk0RTPxeagbCzszwsAzJFtiCuKNdYUgLBKXvs4ZADZU9jCJHE0KwzSiRBTXBRItTYoO4SYQkCe9IPbTFpDJua9YAa0ZoRHs30GfQo1OJ+HZMPjI2vGNYDNXls7GEAImONmqyXcg40sydsgz35ZzkMIM5loDBZEMTzrpSExjGVRl9WImfTuHRHmzV1Y2dnGUsUqbKQjFJ4ANbDXc4+GltGzTtQGj2xKiFQshJTTFeiopEAO4kaVX3JYwufXWKKKRQqX5MMKCYun6EJhwRBUy4Slw/ERHorFhIeP37ckYg3CFj041iwcvIakjpFCrHU4E0iWzZsusZzaowFqFmvGklJOauoZPr0fwf2lWmg7IZ7XOuRkpGFk4dpKmSCXoKmywdiIr0VC2n5QEykt2IhLR+IiSRJNBK8gQf3jHlRJDCLeDBdyFVngZpRZPkMCDd4k6oKRh2DVRJoGpYl3KaoSU4Og2oDppTX5IRH7jk1/8qp0ahzwp4sYMnzQiHR3AQq5LZwJ8ayTptv8dBTzLz7L9DAPrMbbHnphS7U+UUOddvShfwYpIkvMDgjHXqcFApzsxAlPAwFm3NvISwaunIEVO8/l7B5BNmUJTRgfMVDLsUr54jCLp9AtROD/lWDMgVykMJsVhJoJVVRw5Py1sJ2Zc29oSb+IsmCCrcIuYe1WBM/R9QMomShZZ50ortT8JH2JnxpZBFoYU/OPNLqK5T4Qk3c3sTSaVkejCw3pgqfrV3gxAw2uUauiZiyebd5FJQCFOEaof/kGEpUD0zWgTluKry6JLODrmIlsYQRNoAIFJTwiTxl2ROpZWU4nOPiDOQan9ftYybOo+bjQtIh3cLhJgEnFBCoSa7YdwtYq8JIsTSBgZyjS6nk0JQKhFagpzOYOQVNEEtFSba0NXIwQtCQQsKS0D1m5jMkBzbyaqmbMSLnbQ0LcqR4szn/8OXkgiGZO2sQ04ja9TMWif1ZOG4wjAFkL93rQxk7lF8LIgs0+awWeTYNLYaImWKeHg6MUnWAAdloc3UgGPFJJMH19e3WA0emTSNqQwuBq+VVQwWrncUwrJH0ErjN9UaiAyTFJpVXaNaC1pfsCzJbsEz3Pdgq1bh36InkFnl2PHO1RoR/NW6OyI8o8Y8Uq2bdbWeFheyMHiuN2YZusKlG2zd5UYhaVDiiNForXkaug9Rk8aSSkZR9TrtisGHTL83OTwp/ClGPDU3EoTl6KTM518Wvr1lCdkFJoIr4j0oXttnxvvhdfjxVYLJBknsQLgxTukMQelBSLHg3VO9mxpJnIJya2YuSoQzJI6wZwmsSsDKXnpPA5K1zJoaMshuqfZTYMTLvWZDabGzzHZPt5wFny/9yPyfAIEfOWI8SNukXYOkCXupsycdAug/1SijBq6FxYdYUEm6rUELPLCzBN71amRwrcYudcd1qrLSBJejPSDKEJA6KYoaCS+aCp03ePY2apaR0jchT8G2gdB2AsNS5agQpDcvjkxC8pWxmp0Px5MmTZvWaKW2wfmWwNvUCqPn75RW5cibXr0GZY2zfXlwajG2EJfk/I2/eyMUHGNuKh403mljx2HBxiJOurxbNvRQTCWIiYVPlIDGoIHO3wb9cuk25QI/LWQpfNpGYaBNhM3O2syfVSa+JdNtqIjE5EdNCYqoiQalayMnWsd0tk4Cil/hMtprSEoTZRMrlvclE0hQ6r2ZOuRTGqxpll41dTcO1W2EwubW2hMwuKEbpP6FGvZbilRxK5Oy3rdDRg6zRhkMbIWUTaSb6mYkEr9+fdkGm8mU+6LUSlHYgZHILwjz1GoNSJxDZMcXmRjaRgE3WHsaoedjSqgUSF86WvJcOu4u4wCo7JatzZOYFlN5hqUSFRStZhlYuBYpksdKIIaXPGqGAFC4jqImTkgOaUqyjkjXyxS2gw1R4mVr+MCcEJ5/Veogh2NclaM+RWR9IMYmas7MlCRVhzsR4ajihKB7jeEswwfsXgVEbaOkJ2Ga40iMUmw9R2nImIkAwSGnREcIQAxRaep47VjFaQtUwHnKRDYJvwwx6McUSZpCGuTgjdstZf04mdxpRVk+JCM37ZTG1/dawCWsIxYoZ/Qs+wGhg0B1KUfJS5IDcEiv2GZ+bBZtETA+zGMuD3GCnUpOSSefloR77cV2+LRi3bm0xe4w2L9KpptoflFCrcDZScrNhFrR0mi7HEnRT7bDOKiJX0mf4CqUcJPW5G6XsYkR6eu7txpESZwllJXJfnImP+cDQ8C9ju1WGbzZoo5oj2x9K/bX1K0xpnhLgSnwgor/XbB1GDWYwSOplbImcoeye9zAJDYmckOVba3RjERKK0gBLerek7QopVJ2j1PSucXuyG2QTNV1atQeh+Qq0Bo/J3MyZ6q4EtDLbcx02yRO0JAkJKkTbr5xKPQuibDKYa2+RIFWdjESjhua0jOKRClBR09dGEr4wXaTDmwekqOEe77KSetmpIgojF0wZFqvpkCPlhDeFE54xDKOcY4IoUYLiSjUZEPUvI3ZfSkcLCXUp/a1rj8qfQ1TVJtw3IrTGHGVLvTmRuhA5T+ZyTUYy+yqLT58+bQ+5WYcGq8FqsN5HsJCzRKtnvOHn8hPYMHvYw8W9xkTygutMsyFTNSmbVJqHZGJPeMBcTi+vThmXkkYqvOaWGbSPXz4QE+mtWEjLB2IildYCA7Vr6ZC+I3YT0OSEKPv17txIrEHtuiw98teslnItGKkjwxqVzgkAQ+lX9eGlzjCVQAByb1LRmFqCMxxQ99YYrT1yZw5343M7CWuvKn3ypFHoJW5L6IWUHIHif9L7caZEAmnvIOHL1fsimBOhEWmtyCGCWheoHbMSI0S91dLtB4h2eNGnumRyeuNO+odQCTEtCJR/1tSLhUGMFg2PQixrzjuErBQnF7OdMDWLSgvNjXhwOkmykWmcBCz1SWLOut4jpxhDCyqtAaO1NaVncEncILrpofQ2nLlpwZvBU5enHlk2HL70Ixqpm5BkI0d2e+S6zhRXLyJF7oFcCHcM4do93wvej9ASr7WNN+12bLqw6dFPb9CuncqDO5G+BPSJjwwFSWL0do82p9S4oTR5NH0H5E1Haq+MmCBzI2JII4xcDVIpGsyemaqr1B5gySpHasdJSYpSJZuyVFIvGyMi5aIA6QiaesVEbCSKPsAlMY2Qdr8qOjn4opuf9HSH1/xhD0M3CxVFF1kcStPH/OPUHoA0PfKoo0YvQtNp7vt6x5Jla4mA0cHDt1pGa3ZZWEwdhXYtztcYIQgg36DtCBAV4ZoHlj+UcrYIpiAlYpeVHMxkVliZBJE595F7tGEbdRjRdnfElji0Bh3MfcTi7Agyl1/CSwFYw6KhA87OztqPad+wwWqwGqz3k6LJPIq24sSQHmuQPjileDazN5qsUPKVUt9UbZu6rcwtqa5iMWFfKvnYl1C2rx5ZE7w2vWy295UK+BeJsGkGlVrB1nlQ43piYuiGrD1XxAmARkyHdkuX+r2h1lAqSFUjw89MgnfECpM1G7hgPkZkBKVijWhzkXc6bw25XRAt1wGeuJ85gMi2SNFVqyN2j545Wqk905CrlUuj+2AIcuBVnQdqQa63xNX2aFYjzFzGV8odPboqHv2aFxHFnVGRIYUkcVbcMqq96Z5TSi8Y++rRPOAdx3kNScrz3HY9nSVSozzELucTeseK1CeXqXiPpRBFe/1mXmnYaV4me56h45zc9lgS1hOroufTMmTp1ZWbVgGiaSxYmdR0NlfK0ZJaxqidI0c9zkvWIksivvQIieO8pAOWHKqUgvEqXZ4y4QsQ0etLSqlHOU1sLjhYjbR2gUVKmtcMOUsoCE0mqRPGilCzM1OpI1iODqC7sZ7rhwTgEOJRmjVSOr/N2aCeQ1Rob+PZqUsKetqAZ2VF9WE6OU+IpiXNgnCQLt6SfhhZUIg2oVqFNag5jxj5dAuiuHwI/znR9VSkgag3CYqTUlyIsi6ofPPKB0ZtL9UF9M6ZjC5B0m6vHAG1y/zLsYd0qGScjaf5Y/A2oUrWpaoOFYvaRIBynJeWf1GSXqjZPBjS7r/mPFGUWCxcluNGajZftJ+IYklwc1JpaPRLKKy3MlKb+3L6UlQBptbaTAnDIzJkE3WRtR8sX1cabaZWD9LgaMs/lOBa6GxpsYR6XkjivKxVaz4FQi5kc5oXox8Knj171qZ5uzsNVoPVYDVYDdbYlK6V+rdK3qC2cCuF7/sycoB9v9mTsLKpbSsvQzoXZ+xtCFd5n/3JNdUsQSqXyOk/GGrB91kVcVbFoaMqlj6rYntWxaGjKpbRZ1Vszqo4dFTF0mdVbM+qOHRUxdJnVWzPqnCFVY6q8H7w8nGqljVvgamNSBT1egoDQmJzt1NfxsE6wnJkULdhRP+2sW03OBuTebFUrPOSwWOsC2zRp9JgazEVaDtPmiu0tQ50ec+O83qnp3nh+fPnbW22Bd9gNVgNVoPVYPXjDcAC9rId6dBhJCoje50b0iTzIWK1bE3vfQ/sOTQ51zYl3kizfJDYmINnVZSDlIF9p0Fvb2MZ79dxXu/0NK9F8HgfjvMy7+2dnOa1qES/B8d5hTP0Dk7zWsRP7rMq/p/TvJY+q+L407xwfn7eNkHbWQ1Wg9VgNVgNVj8arAbrVwYLpTykJOBua6BGyaGp2brF3a1docdeGgjRbGbDFmE/7VNa5OzJ0cWoRVbY2xUnUTvYdLH271y06yeSdzMLKcytA+RYFiuOFjc3KgG070kJ7HGDhXWDnX51nAibT8UNf9w9PqiPJgU4foNgaiOZTjFJRyvMzHR4JbdU1kirDSzqhUbdFazlYs0nJ9IBYKw8GblhaqLoJEWAk2sZ/nG8gVEBFHV8uSEuU+JMdDtZffp9fQ6iW7aX+EUD65xKUHp5XzaiNvokH+0xbKqHh9j3HC+cF4okdoTnHbkuxrJxz1kVFNhciof0WQ/GjIWz8Z7e0U82NXAecbyHli1474Mh1EZK+5FOE8YDLhq8j9NAKCRaNHA4gJI3XJmHKSfyRNnXNGvpIBbIOYyJU6X3Chd6oTDVfpg1nX5LLdJTtyNqnyyHSHgPT0yR00ON63rx4kVvc206NFgNVoPVYDVY/WiwGqwG67cF1vtznJdmmeT2NF4fBOS2n6XjTS3zEnpqCXftvTjO652e5rWM9+s4r3d6mtcy3q/jvN7paV7LeL+O83qnp3nh5cuXvc216dBgNVgNVoPVYPWjwWqwGqwGq8FqsLS3cCLzRnS2KC2ha5fYoOQQHWz2V7yVj0u/LDV4coiY9uYBsOlAtIcZRO6iPQqjmU8Ty/eEfHiYvcopGrJ2DIafCpwP56I0ENHiGUz6gc5AIR/OMrbHCOsxuN6kRBoecRYFWfuHySPNFjl6xkVk3DCOw4E0hJBfpkq/6AMabKV3u9RGGYhlCO11EmdAp44SI7VfYTnGltoICn6aFoSDlPqaKSJ+xpO2Do3G3cgntORytHRiNbTRJ6P7ECVrCUZnASOdf5baEicSyHBev+OXX35pZdQKvsFqsBqsBqvB6keD1WA1WA1Wg9Vg9aPBarAarN8YWJoJmpMzR+WFlWLEkMZN+x7bkwrrueeSbKgd9pEp63zq4tieCJ8bx+nRPIii4twgrn4r9jaOixcDi2d4WnIn0ynsjPOod2+iHha4NgKrHPHQ0/2M0ow21PSkRTniar7PD1VPVYnRoMyLCVNB73zv7i/Af/BstdlFWXupIfdVs97Q3mcOqVOUF5a+evWq11frrAarwWqwGqwGqx8NVoPVYDVYDVaD1Y8Gq8FqsBqsBqvB6keD9Y7Agh5beOCUY2zqCuIt+bhePexU+3FYsn9pGgukrH9tNZLCPSOVACCf3TLkYredToCx9xjlzZtyJEoOuhx60kk/ehk2WA1Wg9VgNVj9aLAarAarwWqwGqx+NFgNVoPVYDVYDVY/GqwGq8FqsBqsBqsfDdZbfvyfAAMAe7fzpzCjARMAAAAASUVORK5CYII=") repeat-x top left;
+}
+#container { position: relative; }
+
+#header {
+  position: relative;
+  box-sizing: content-box;
+  width: 90%;
+  max-width: 980px;
+  height: 140px;
+  margin: 0 auto;
+  padding-bottom: 22px;
+  background: url("data:image/png;base64,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") no-repeat 10px 64%;
+  background-size: 100px 100px;
+  z-index: 10;
+}
+#header h1 {
+  position: absolute;
+  left: 120px;
+  top: 56px;
+  margin: 0;
+  font-family: "SimHei", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 44px;
+  line-height: 1.06;
+  letter-spacing: 1px;
+  color: #eee;
+  text-shadow: 3px 3px 5px #000;
+  white-space: nowrap;
+}
+#header h1 a { color: #eee; text-decoration: none; }
+#header h2 {
+  position: absolute;
+  left: 122px;
+  top: 101px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #f0f0c0;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, .8);
+}
+#login-status {
+  position: absolute;
+  right: 9px;
+  top: 14px;
+  color: #aaa;
+  font-size: 90%;
+  z-index: 15;
+}
+#login-status a { color: #ddd; background: transparent; }
+#login-status .dot { color: #c66; margin: 0 2px; }
+
+#search-top-box {
+  position: absolute;
+  top: 74px;
+  right: 9px;
+  width: 262px;
+  text-align: right;
+  z-index: 15;
+}
+#search-form { display: flex; justify-content: flex-end; gap: 4px; }
+#search-input {
+  width: 182px;
+  padding: 3px 7px;
+  border: 1px solid #999;
+  border-radius: 5px;
+  background-color: #300;
+  color: #ccc;
+  font-family: inherit;
+  font-size: 12px;
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, .5);
+}
+#search-input::placeholder { color: #b99; }
+#search-input:hover, #search-input:focus {
+  outline: none;
+  border-color: #fff;
+  color: #fff;
+  background-color: #633;
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, .8);
+}
+#search-btn {
+  padding: 3px 9px;
+  border: 1px solid #999;
+  border-radius: 5px;
+  color: #ccc;
+  background-color: #633;
+  background-image: linear-gradient(to bottom, #966, #633, #300);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+#search-btn:hover, #search-btn:focus {
+  border-color: #fff;
+  color: #fff;
+  background-image: linear-gradient(to bottom, #c99, #966, #633);
+}
+#search-results {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 330px;
+  margin-top: 5px;
+  background: #fff;
+  border: 1px solid #999;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
+  text-align: left;
+  max-height: 380px;
+  overflow: auto;
+  z-index: 60;
+}
+#search-results a {
+  display: block;
+  padding: 6px 10px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+#search-results a:hover { background: #fdf1f1; text-decoration: none; }
+#search-results .sr-title { display: block; color: #901; font-weight: bold; }
+#search-results .sr-snippet {
+  display: block;
+  color: #888;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#search-results .sr-empty { padding: 9px 10px; color: #999; font-size: 12px; }
+
+/* ---------------- 顶部菜单 ---------------- */
+#top-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 140px;
+  height: 21px;
+  line-height: 18px;
+  font-size: 90%;
+  z-index: 20;
+}
+#top-bar .menu {
+  display: flex;
+  justify-content: flex-end;
+  width: 90%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+#top-bar .menu > li { position: relative; }
+#top-bar .menu > li > a {
+  display: block;
+  padding: 2px 13px;
+  color: #fff;
+  font-weight: bold;
+  white-space: nowrap;
+  border-left: 1px solid rgba(64, 64, 64, .1);
+  border-right: 1px solid rgba(64, 64, 64, .1);
+}
+#top-bar .menu > li > a:hover,
+#top-bar .menu > li:focus-within > a {
+  background: #eee;
+  color: #a01;
+  text-decoration: none;
+}
+#top-bar .menu ul {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  min-width: 178px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #666;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .5);
+  z-index: 25;
+}
+#top-bar .menu li:hover > ul,
+#top-bar .menu li:focus-within > ul { display: block; }
+#top-bar .menu ul li { margin: 0; }
+#top-bar .menu ul a {
+  display: block;
+  padding: 3px 11px;
+  color: #a01;
+  font-weight: normal;
+  border-top: 1px solid #ddd;
+  white-space: nowrap;
+}
+#top-bar .menu ul li:first-child a { border-top: 0; }
+#top-bar .menu ul a:hover { color: #600; text-decoration: none; background: #fff; }
+
+/* ---------------- 布局 ---------------- */
+#content-wrap {
+  position: relative;
+  margin: 2em auto 0;
+  max-width: 1040px;
+  min-height: 1300px;
+}
+#side-bar {
+  position: absolute;
+  top: .5em;
+  left: 2em;
+  width: 17em;
+  padding: 0;
+}
+#main-content {
+  margin: 0 2em 0 22em;
+  padding: 1em;
+  position: relative;
+  min-height: 560px;
+}
+
+/* ---------------- 侧栏 ---------------- */
+#side-bar .side-block {
+  padding: 10px;
+  border: 1px solid #600;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(102, 0, 0, .5);
+  background: #fff;
+  margin-bottom: 15px;
+}
+#side-bar .side-block.tint { background: #f0fff6; }
+#side-bar .side-block.media { background: #e5e5ff; }
+#side-bar .heading {
+  color: #600;
+  border-bottom: 1px solid #600;
+  padding-left: 15px;
+  margin: 10px 0 5px;
+  font-size: 8pt;
+  font-weight: bold;
+}
+#side-bar .heading:first-child { margin-top: 0; }
+#side-bar .menu-item { margin: 2px 0; line-height: 1.5; }
+#side-bar .menu-item a { font-weight: bold; }
+#side-bar .menu-item a:visited { color: #b01; }
+#side-bar .icon {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin-right: 2px;
+  vertical-align: -2px;
+  background-repeat: no-repeat;
+  background-size: 13px 13px;
+}
+#side-bar .icon-help { background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAMNJREFUeNpi/P//PwOpgImBHACyCRvezSB4BijNBsTMeG1iZGQE4z2MQiANII3HgBQvhkZk06EKz0AVSgGxAhKfGatNUAUgej8QbwIyv8H4yBrhmmBOggFXhvdRQMXbkAzcA9PICHMW0C9sUD9gBUBDEoHUWyB+g+y8v0AJFzRFMHYK1Kkg/BfZJgaom3mhToFpiANSP6G2fAZpQgk5KABpFIAGihooBEF85NBDtwlZI8jTXFAnQWxAjycsgBlXigAIMABZtmJmKR0/+QAAAABJRU5ErkJggg=="); }
+#side-bar .icon-main { background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJRJREFUeNpi/P//PwOpgJFumhhAmmAYGexmEDwDpNiAmBmvTYyMjMgawMCV4b0LkPoMxH9xakLWgEsjiqY9jEJncHkDWSO6TWxAm45h0ZAIpN4C8Rsg/oWuCeRpXqDGPUgaUqA2vIU7EUvogTQKQP2mC8TKID5yKGINPagCXiDmAuJvBEMPCTBD8V9kDYQ04QQAAQYATOVXoG10VREAAAAASUVORK5CYII="); }
+#side-bar .icon-default { background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAGdJREFUeNpi/P//PwOpgImBDDDINbFgE9zDKHQGxnZleG8HpH4C8V9YoBFjkzAQs5PqPE4gZkYWYMQWT4yMjFxQG0AavgPxWyD+BlOLSxMz1Ekg+i+6n3BpwupOmFoWfJJUjSeAAAMAQSomMvNGFXUAAAAASUVORK5CYII="); }
+#side-bar .icon-series { background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKNJREFUeNpi/P//PwOpgJEcTSzInD2MQmdgbFeG93ZA6icQ/8XQBbIJhnczCII0SQGxLBALAzEbQZuggBmoeT0+G5mwaPqLpCEcaMAhIJMLZBg+TciAHajRD6hxP7JGFnw6gIoXIXF5oa74xkRCSHPCbELRhORpbIAZV+iBNPwhKUUwMjLCmFzQeOJEUvsdiN+C/IRLE8gp7MhOggYCOL4AAgwA3IM2AIgkfcsAAAAASUVORK5CYII="); }
+#side-bar .icon-forum { background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ9JREFUeNpi/P//PwOpgJFumliQOXsYhc7gUujK8N4OSP0E4r9wm/BpQNLoAqQ+s5DoMgEg/sVEoiY2IGaGO4+RkZFrN4PgITxOSwFSH4D4FbImZiDFC3UCG9CAZUiKfwHxN6imzwwgTUjBDtLIBdIM1AQKGDUgVgZiYag4M0o8AW1CdxFIEQ/Uls+goIbLoNmEDJhhHseQwaMJJwAIMAC9FEJEk9DMEQAAAABJRU5ErkJggg=="); }
+#side-bar .cc-line { text-align: center; margin: 6px 0; }
+#side-bar .cc-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: #333;
+  color: #fff;
+  font-size: 10px;
+  letter-spacing: .5px;
+}
+#side-bar .cc-line a:hover { text-decoration: none; }
+#side-bar .side-fine { font-size: 90%; color: #666; }
+
+/* ---------------- 页面标题 / 评分 ---------------- */
+#page-title {
+  color: #901;
+  font-weight: normal;
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: .5px;
+  border-bottom: 1px solid #bbb;
+  padding: 0 0 .25em;
+  margin: 0 0 .55em;
+  word-break: break-word;
+}
+#page-rating { text-align: right; margin: 0 0 .7em; }
+.page-rate-widget-box {
+  display: inline-block;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, .5);
+  font-size: 11.5px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.page-rate-widget-box .rate-points {
+  display: inline-block;
+  padding: 2px 7px;
+  background-color: #633;
+  border: 1px solid #633;
+  border-right: 0;
+  border-radius: 5px 0 0 5px;
+  color: #fff;
+}
+.page-rate-widget-box .rate-btn {
+  display: inline-block;
+  background-color: #fff6f0;
+  border-top: 1px solid #633;
+  border-bottom: 1px solid #633;
+}
+.page-rate-widget-box .rate-btn a {
+  display: inline-block;
+  padding: 2px 6px;
+  color: #633;
+  font-weight: bold;
+}
+.page-rate-widget-box .rate-btn a:hover { background: #633; color: #fffff0; text-decoration: none; }
+.page-rate-widget-box .rate-cancel { background-color: #633; border: 1px solid #633; border-left: 0; }
+.page-rate-widget-box .rate-cancel a { color: #966; }
+.page-rate-widget-box .rate-cancel a:hover { color: #fffff0; }
+.page-rate-widget-box .rate-info { border-radius: 0 5px 5px 0; background-color: #633; border-color: #633; }
+.page-rate-widget-box .rate-info a { color: #c99; }
+
+/* ---------------- 正文排版 ---------------- */
+:is(#page-content, #edit-body) {
+  min-height: 480px;
+  font-size: 1em;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+:is(#page-content, #edit-body) h2 {
+  color: #901;
+  font-size: 1.2em;
+  letter-spacing: 1px;
+  margin: 1.4em 0 .5em;
+  padding: 0;
+}
+:is(#page-content, #edit-body) h3 {
+  color: #901;
+  font-size: 1.05em;
+  letter-spacing: .5px;
+  margin: 1.2em 0 .4em;
+}
+:is(#page-content, #edit-body) ul,
+:is(#page-content, #edit-body) ol { margin: .6em 0; padding-left: 2em; }
+:is(#page-content, #edit-body) li { margin: .2em 0; line-height: 1.5; }
+:is(#page-content, #edit-body) hr {
+  border: 0;
+  border-top: 1px solid #bbb;
+  height: 0;
+  margin: 1.2em 0;
+}
+:is(#page-content, #edit-body) blockquote {
+  border: 1px dashed #999;
+  background: #f4f4f4;
+  padding: .1em 1em;
+  margin: 1em 2em;
+  color: #333;
+}
+:is(#page-content, #edit-body) table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 1em;
+}
+:is(#page-content, #edit-body) th,
+:is(#page-content, #edit-body) td {
+  border: 1px solid #bbb;
+  padding: 4px 9px;
+  vertical-align: top;
+}
+:is(#page-content, #edit-body) th { background: #f2f2f2; text-align: left; }
+:is(#page-content, #edit-body) pre {
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+  padding: 8px 10px;
+  overflow: auto;
+  font-size: .95em;
+  line-height: 1.45;
+}
+:is(#page-content, #edit-body) details {
+  border: 1px solid #ddd;
+  background: #fafafa;
+  padding: 6px 10px;
+  margin: .8em 0;
+}
+:is(#page-content, #edit-body) summary { cursor: pointer; font-weight: bold; color: #600; }
+:is(#page-content, #edit-body) .scp-image-block {
+  float: right;
+  clear: right;
+  width: 300px;
+  margin: .3em 0 1em 2em;
+  border: 1px solid #666;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .25);
+  background: #fff;
+}
+:is(#page-content, #edit-body) .scp-image-block img { display: block; width: 100%; border: 0; }
+:is(#page-content, #edit-body) .scp-image-caption {
+  background: #eee;
+  border-top: 1px solid #666;
+  padding: 2px 6px;
+  font-size: 80%;
+  font-weight: bold;
+  text-align: center;
+}
+:is(#page-content, #edit-body) .footer-wikiwalk-nav {
+  font-weight: bold;
+  font-size: 75%;
+  margin-top: 2em;
+  text-align: center;
+}
+:is(#page-content, #edit-body) .panel-by { font-size: 80%; color: #666; }
+
+/* ---------------- 主页元素 ---------------- */
+.home-warning { text-align: center; margin: 0 0 1.4em; }
+.scp-emblem {
+  width: 250px;
+  height: 250px;
+  margin: 0 auto .1em;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAAD6CAYAAACI7Fo9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MTYwNkM1MDA4NDFEMTFFNTg3NjI4MDUyNzhFNTc4QkUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MTYwNkM1MDE4NDFEMTFFNTg3NjI4MDUyNzhFNTc4QkUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxNjA2QzRGRTg0MUQxMUU1ODc2MjgwNTI3OEU1NzhCRSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxNjA2QzRGRjg0MUQxMUU1ODc2MjgwNTI3OEU1NzhCRSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuyOg9oAACQpSURBVHja7F0HuBbF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") center / contain no-repeat;
+}
+.warn-kicker { color: #901; font-size: 13px; margin: 0; }
+.warn-big {
+  color: #901;
+  font-size: 44px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  line-height: 1.25;
+  margin: .05em 0 .2em;
+}
+.warn-sub { font-size: 12px; line-height: 1.65; color: #333; margin: 0; }
+.home-rule { border: 0; background: #a00; height: 1px; margin: 1.2em 0 1.6em; }
+.home-lead { font-size: 1.08em; }
+.home-fine { font-size: 90%; color: #666; }
+.content-panel {
+  border: 1px solid #888880;
+  border-radius: 10px;
+  background: #999990;
+  margin: 10px 0 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .35);
+  overflow: hidden;
+}
+.content-panel .panel-heading {
+  padding: 3px 12px;
+  color: #fff;
+  font-size: 90%;
+  font-weight: bold;
+  background: linear-gradient(to bottom, #8c8c85, #6e6e67);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, .35);
+}
+.content-panel .panel-body { padding: 6px 14px; background: #fff9f0; }
+.content-panel .panel-body p { margin: .4em 0; }
+.intl-table td:first-child { white-space: nowrap; font-weight: bold; }
+
+/* 故事排版 */
+.tale-meta { color: #777; font-size: 90%; letter-spacing: 1px; }
+.tale-note {
+  text-align: center;
+  font-size: 1.8em;
+  font-weight: bold;
+  letter-spacing: 8px;
+  color: #600;
+  margin: 1.4em 0;
+}
+.tale-sign { text-align: right; color: #666; font-size: 90%; margin-top: 2em; }
+
+/* 目录 / 列表 */
+.page-directory h3 { margin: 1.2em 0 .3em; }
+.page-list { list-style: none; padding: 0; margin: 0; }
+.page-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0;
+  border-bottom: 1px dotted #ddd;
+  line-height: 1.5;
+}
+.page-list .meta { color: #999; font-size: 90%; white-space: nowrap; }
+.missing-note { font-size: 1.1em; color: #901; }
+
+/* ---------------- 标签 / 页脚操作 ---------------- */
+#page-tags {
+  font-size: 11px;
+  color: #666;
+  margin: 1.6em 0 .3em;
+  line-height: 1.9;
+}
+#page-tags a { color: #b01; margin-right: 3px; }
+#page-options-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: #666;
+  border-top: 1px solid #ddd;
+  margin-top: 6px;
+  padding-top: 6px;
+}
+#page-options-bottom .page-options { text-align: right; }
+#page-options-bottom .page-options a,
+#page-options-bottom .page-options button {
+  color: #901;
+  margin-left: 10px;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+#page-options-bottom .page-options a:hover,
+#page-options-bottom .page-options button:hover { text-decoration: underline; }
+
+/* ---------------- 页脚 ---------------- */
+#footer {
+  clear: both;
+  background: #444;
+  color: #bbb;
+  font-size: 77%;
+  margin-top: 15px;
+  padding: 6px 10px;
+}
+#footer .inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 20px;
+}
+#footer a { color: #fff; background: transparent; }
+#license-area {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 10px 12px 34px;
+  color: #888;
+  font-size: 77%;
+  text-align: center;
+  line-height: 1.7;
+}
+
+/* ---------------- 编辑器 ---------------- */
+#editor {
+  border: 1px solid #600;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(102, 0, 0, .25);
+  margin: 0 0 1em;
+}
+.editor-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 8px;
+  background: linear-gradient(to bottom, #fff8f2, #f6e9df);
+  border-bottom: 1px solid #d8bdbd;
+  border-radius: 8px 8px 0 0;
+}
+.tb-group { display: flex; flex-wrap: wrap; gap: 2px; }
+.tb-group button {
+  border: 1px solid #cbb;
+  background: #fff;
+  color: #633;
+  border-radius: 4px;
+  padding: 3px 7px;
+  min-height: 25px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.2;
+}
+.tb-group button:hover { background: #633; border-color: #633; color: #fff; }
+.tb-group button.active { background: #633; border-color: #633; color: #fff; }
+.tb-right { margin-left: auto; }
+.tb-right button.primary {
+  background: #700;
+  border-color: #700;
+  color: #fff;
+  font-weight: bold;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.tb-right button.primary:hover { background: #901; border-color: #901; }
+.editor-meta { display: flex; gap: 8px; padding: 10px 12px 0; }
+.editor-meta input {
+  font-family: inherit;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px 8px;
+}
+.editor-meta input:focus { outline: none; border-color: #b88; background: #fffdfb; }
+.edit-title { flex: 1; min-width: 0; font-size: 20px; color: #901; }
+.edit-tags { width: 230px; font-size: 12px; }
+#edit-body { padding: 12px 16px; outline: none; }
+#edit-body:focus { background: #fffdf9; }
+#edit-body:empty::before { content: "在这里写正文……"; color: #bbb; }
+.edit-source {
+  display: block;
+  width: 100%;
+  min-height: 460px;
+  border: 0;
+  border-top: 1px solid #eee;
+  padding: 12px 16px;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+  resize: vertical;
+  outline: none;
+  color: #333;
+}
+.editor-foot {
+  padding: 6px 14px;
+  border-top: 1px solid #eee;
+  color: #999;
+  font-size: 11px;
+  background: #fcfcfc;
+  border-radius: 0 0 8px 8px;
+}
+
+/* ---------------- 悬浮按钮 / 提示 ---------------- */
+#fab {
+  position: fixed;
+  right: 26px;
+  bottom: 26px;
+  z-index: 40;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid #500;
+  background: #700;
+  color: #fff;
+  font-size: 21px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, .45);
+}
+#fab:hover { background: #901; }
+body.is-editing #fab { display: none; }
+#fab svg { width: 20px; height: 20px; fill: currentColor; }
+
+#toast-root {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  max-width: 92vw;
+}
+.toast {
+  background: rgba(40, 10, 10, .93);
+  color: #fff;
+  padding: 7px 16px;
+  border-radius: 18px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, .3);
+  animation: toastIn .18s ease-out;
+}
+.toast.error { background: rgba(150, 20, 20, .96); }
+@keyframes toastIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ---------------- 对话框 ---------------- */
+#modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 6vh 16px 24px;
+  overflow: auto;
+  background: rgba(20, 8, 8, .58);
+}
+.modal {
+  width: min(620px, 100%);
+  background: #fff;
+  border: 1px solid #600;
+  border-radius: 10px;
+  box-shadow: 0 12px 44px rgba(0, 0, 0, .55);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.modal.wide { width: min(820px, 100%); }
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 15px;
+  background: #fdf3f3;
+  border-bottom: 1px solid #e6cccc;
+  border-radius: 10px 10px 0 0;
+}
+.modal-head h3 { margin: 0; color: #901; font-size: 16px; }
+.modal-close {
+  border: 0;
+  background: transparent;
+  color: #999;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 3px;
+}
+.modal-close:hover { color: #600; }
+.modal-body { padding: 14px 16px; max-height: 62vh; overflow: auto; }
+.modal-body p { margin: .5em 0; }
+.modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 16px;
+  border-top: 1px solid #eee;
+  background: #fafafa;
+  border-radius: 0 0 10px 10px;
+}
+.btn {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 5px 15px;
+  border: 1px solid #999;
+  border-radius: 5px;
+  background: linear-gradient(to bottom, #fff, #eee);
+  color: #333;
+  cursor: pointer;
+}
+.btn:hover { border-color: #600; color: #600; }
+.btn.primary {
+  border-color: #600;
+  background: linear-gradient(to bottom, #a33, #700);
+  color: #fff;
+}
+.btn.primary:hover { background: linear-gradient(to bottom, #c44, #901); color: #fff; }
+.btn.danger { border-color: #c99; color: #a00; }
+.btn.danger:hover { border-color: #a00; background: #a00; color: #fff; }
+.form-row { margin: 0 0 12px; }
+.form-row label { display: block; margin-bottom: 4px; color: #600; font-weight: bold; font-size: 12px; }
+.form-row input[type="text"],
+.form-row select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  background: #fff;
+  color: #333;
+}
+.form-row input[type="text"]:focus,
+.form-row select:focus { outline: none; border-color: #b77; }
+.form-hint { font-size: 11.5px; color: #888; margin: 6px 0 0; }
+.history-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.history-table th, .history-table td { border-bottom: 1px solid #eee; padding: 5px 5px; text-align: left; }
+.history-table th { background: #faf3f3; color: #600; }
+.link-btn {
+  border: 0;
+  background: none;
+  color: #b01;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  padding: 0 4px;
+  text-decoration: underline;
+}
+.version-preview {
+  border: 1px solid #eee;
+  background: #fffdf9;
+  padding: 8px 14px;
+  max-height: 46vh;
+  overflow: auto;
+  font-size: 12.8px;
+}
+.version-preview h2 { color: #901; font-size: 1.15em; }
+
+/* ---------------- 移动端 ---------------- */
+#menu-toggle { display: none; }
+#menu-backdrop { display: none; }
+@media (max-width: 900px) {
+  #login-status { font-size: 11px; }
+  #search-top-box { width: 220px; }
+  #search-input { width: 140px; }
+}
+@media (max-width: 767px) {
+  #header {
+    height: 108px;
+    background-size: 62px 62px;
+    background-position: 4px 62%;
+  }
+  #header h1 { left: 78px; top: 26px; font-size: 29px; }
+  #header h2 { left: 80px; top: 66px; font-size: 12px; }
+  #login-status { top: 9px; right: 4px; }
+  #search-top-box { display: none; }
+  #top-bar { display: none; }
+  #content-wrap { margin-top: 1.1em; min-height: 0; }
+  #main-content { margin: 0 4%; padding: 0 0 1em; }
+  #side-bar {
+    position: fixed;
+    top: 0;
+    left: -20em;
+    width: 17em;
+    height: 100vh;
+    padding: 1em;
+    overflow: auto;
+    background: #f7f1f1;
+    z-index: 90;
+    transition: left .25s ease;
+    box-shadow: 2px 0 16px rgba(0, 0, 0, .45);
+  }
+  body.menu-open #side-bar { left: 0; }
+  #menu-toggle {
+    display: flex;
+    position: fixed;
+    left: 8px;
+    top: 8px;
+    z-index: 95;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid #888;
+    background: #fff;
+    color: #666;
+    font-size: 17px;
+    cursor: pointer;
+  }
+  body.menu-open #menu-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    background: rgba(0, 0, 0, .35);
+  }
+  #page-title { font-size: 22px; }
+  .recent-table td:last-child, .recent-table th:last-child { white-space: nowrap; }
+  .scp-emblem { width: 180px; height: 180px; }
+  .warn-big { font-size: 33px; letter-spacing: 3px; }
+  .editor-meta { flex-direction: column; gap: 6px; }
+  .edit-tags { width: 100%; }
+  #fab { right: 14px; bottom: 14px; width: 44px; height: 44px; }
+  :is(#page-content, #edit-body) blockquote { margin: 1em .4em; }
+  #modal-root { padding: 2vh 10px 10px; }
+  #footer .inner { flex-direction: column; }
+}
+@media (max-width: 479px) {
+  #header h1 { font-size: 24px; }
+  #header h2 { font-size: 11px; }
+  .warn-big { font-size: 27px; }
+  .tb-group button { padding: 3px 5px; font-size: 11px; }
+}
+
+/* ---------------- 打印 ---------------- */
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  #container-wrap { background: none; }
+  #header, #top-bar, #side-bar, #page-rating, #page-tags,
+  #page-options-bottom, #footer, #license-area, #fab, #menu-toggle,
+  #editor, #toast-root, #modal-root, #search-top-box { display: none !important; }
+  #content-wrap { margin: 0; max-width: none; min-height: 0; }
+  #main-content { margin: 0; padding: 0; }
+  #page-title { display: block !important; color: #901; }
+  #page-content { min-height: 0; }
+  a { color: #333; }
+  #page-content a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 80%; color: #777; }
+}
+</style>
+</head>
+<body>
+
+<noscript>
+  <div style="max-width:640px;margin:40px auto;padding:18px 22px;border:1px solid #600;border-radius:10px;background:#fff6f6;color:#600;text-align:center;font-family:Verdana,'Microsoft YaHei',sans-serif;font-size:14px;line-height:1.7">
+    本站需要启用 JavaScript 才能显示页面内容与编辑功能。<br>请在浏览器设置中允许 JavaScript，然后刷新页面。
+  </div>
+</noscript>
+
+<div id="container-wrap">
+  <div id="container">
+    <div id="header">
+      <h1><a href="#/main" id="site-title">SCP基金会</a></h1>
+      <h2><span id="site-subtitle">控制，收容，保护</span></h2>
+      <div id="login-status">
+        <span id="storage-state">个人站</span><span class="dot">·</span>
+        <a href="#" data-action="settings">设置</a><span class="dot">·</span>
+        <a href="#" data-action="new-page">新建</a>
+      </div>
+      <div id="search-top-box">
+        <form id="search-form" autocomplete="off">
+          <input id="search-input" type="search" placeholder="搜索网站" aria-label="搜索网站">
+          <button id="search-btn" type="submit">搜索</button>
+        </form>
+        <div id="search-results" hidden></div>
+      </div>
+    </div>
+
+    <div id="top-bar">
+      <ul class="menu">
+        <li><a href="#/main" id="top-home">主页</a></li>
+        <li><a href="#/all">SCP-CN系列</a><ul id="menu-scp"></ul></li>
+        <li><a href="#/all">故事</a><ul id="menu-tale"></ul></li>
+        <li><a href="#/all">图书馆</a>
+          <ul>
+            <li><a href="#/all">所有页面</a></li>
+            <li><a href="#/recent">最近更新</a></li>
+            <li><a href="#" data-action="random">随机页面</a></li>
+          </ul>
+        </li>
+        <li><a href="#/guide">指导</a>
+          <ul>
+            <li><a href="#/guide">新手指南</a></li>
+            <li><a href="#/about">关于本站</a></li>
+            <li><a href="#" data-action="shortcuts">快捷键</a></li>
+          </ul>
+        </li>
+        <li><a href="#" data-action="new-page">工具</a>
+          <ul>
+            <li><a href="#" data-action="new-page">新建页面</a></li>
+            <li><a href="#" data-action="edit">编辑本页</a></li>
+            <li><a href="#" data-action="import">导入备份</a></li>
+            <li><a href="#" data-action="export">导出备份</a></li>
+            <li><a href="#" data-action="settings">站点设置</a></li>
+            <li><a href="#" data-action="reset">恢复默认内容</a></li>
+            <li><a href="#" data-action="sync-online">从线上内容刷新</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div id="content-wrap">
+      <div id="side-bar"></div>
+      <div id="main-content">
+        <div id="page-title"></div>
+        <div id="page-rating"></div>
+
+        <div id="editor" hidden>
+          <div class="editor-toolbar" id="editor-toolbar">
+            <div class="tb-group">
+              <button type="button" data-cmd="bold" title="加粗 (Ctrl+B)"><b>B</b></button>
+              <button type="button" data-cmd="italic" title="斜体 (Ctrl+I)"><i>I</i></button>
+              <button type="button" data-cmd="underline" title="下划线 (Ctrl+U)"><u>U</u></button>
+              <button type="button" data-cmd="strikeThrough" title="删除线"><s>S</s></button>
+            </div>
+            <div class="tb-group">
+              <button type="button" data-cmd="formatBlock" data-value="h2" title="二级标题">H2</button>
+              <button type="button" data-cmd="formatBlock" data-value="h3" title="三级标题">H3</button>
+              <button type="button" data-cmd="formatBlock" data-value="blockquote" title="引用块">引用</button>
+              <button type="button" data-cmd="formatBlock" data-value="pre" title="代码块">代码</button>
+            </div>
+            <div class="tb-group">
+              <button type="button" data-cmd="insertUnorderedList" title="无序列表">• 列表</button>
+              <button type="button" data-cmd="insertOrderedList" title="有序列表">1. 列表</button>
+              <button type="button" data-cmd="hr" title="分割线">分割线</button>
+              <button type="button" data-cmd="table" title="插入表格">表格</button>
+              <button type="button" data-cmd="collapsible" title="插入折叠块">折叠</button>
+            </div>
+            <div class="tb-group">
+              <button type="button" data-cmd="link" title="插入链接">链接</button>
+              <button type="button" data-cmd="image" title="插入图片">图片</button>
+              <button type="button" data-cmd="removeFormat" title="清除格式">清除格式</button>
+            </div>
+            <div class="tb-group tb-right">
+              <button type="button" id="btn-source" title="在可视化编辑与 HTML 源码之间切换">HTML</button>
+              <button type="button" class="primary" id="btn-save" title="保存 (Ctrl+S)">保存</button>
+              <button type="button" id="btn-cancel" title="取消 (Esc)">取消</button>
+            </div>
+          </div>
+          <div class="editor-meta">
+            <input id="edit-title" class="edit-title" type="text" placeholder="页面标题" aria-label="页面标题">
+            <input id="edit-tags" class="edit-tags" type="text" placeholder="标签：用逗号分隔" aria-label="标签">
+          </div>
+          <div id="edit-body" class="edit-body" contenteditable="true" spellcheck="false"></div>
+          <textarea id="edit-source" class="edit-source" spellcheck="false" hidden aria-label="HTML 源码"></textarea>
+          <div class="editor-foot">Ctrl+S 保存 · Esc 取消 · 支持从网页或 Word 粘贴 · 所有内容只保存在本机浏览器</div>
+        </div>
+
+        <div id="page-content"></div>
+        <div id="page-tags"></div>
+        <div id="page-options-bottom"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="inner">
+      <span>SCP基金会维基 <strong>Sigma-9</strong> 版式和样式由 <a href="https://www.wikidot.com/user:info/aelanna" target="_blank" rel="noopener">Aelanna</a> 设计，适用 <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.zh" target="_blank" rel="noopener">CC BY-SA 3.0</a> 授权协议。</span>
+      <span>个人本地站点 · 非官方 · 单文件无依赖</span>
+    </div>
+  </div>
+  <div id="license-area">
+    本站内容由站点所有者创作并保存在浏览器本地，与 SCP 基金会官方及中文分部无隶属关系。<br>
+    版式致敬 <a href="https://scp-wiki-cn.wikidot.com/" target="_blank" rel="noopener">SCP 基金会中文分部</a> · 由单个 HTML 文件驱动
+  </div>
+</div>
+
+<button id="fab" type="button" data-action="edit" title="编辑本页 (Ctrl+E)" aria-label="编辑本页"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>
+<button id="menu-toggle" type="button" data-action="toggle-menu" aria-label="打开菜单">☰</button>
+<div id="menu-backdrop" data-action="close-menu"></div>
+
+<div id="modal-root" hidden></div>
+<div id="toast-root"></div>
+
+<input type="file" id="image-file" accept="image/*" hidden>
+<input type="file" id="import-file" accept=".json,application/json" hidden>
+
+<script type="text/x-page" data-slug="main" data-title="主页" data-tags="系统" data-days="30" data-updated-days="0.02" data-rating="12">
+<div class="home-warning">
+  <div class="scp-emblem" aria-hidden="true"></div>
+  <p class="warn-kicker">警告：基金会资料库属于</p>
+  <p class="warn-big">高度机密</p>
+  <p class="warn-sub">严禁未经授权的人员进行访问<br>肇事者将被监控，定位并处理</p>
+</div>
+<div class="home-rule"></div>
+<p class="home-lead">欢迎来到 <strong>SCP 基金会中文维基 · 个人站</strong>。这里是一份保存在你浏览器里的、可以随意改写的基金会档案库。</p>
+<p>本站复刻了 <a href="https://scp-wiki-cn.wikidot.com/" rel="noopener">SCP 基金会中文分部</a> 的 Sigma-9 版式，但所有页面、修订记录与评分都只属于你一个人。点击右下角的编辑按钮，或页面下方的「编辑」链接，即可开始；第一次来，建议先读 <a href="#/guide">新手指南</a>。</p>
+<h2>本站概览</h2>
+<p>当前收录 <strong>{{页面数}}</strong> 个页面，最近一次更新在 {{最近更新日期}}。所有内容保存在本机浏览器中，不会上传到任何服务器。</p>
+<h2>最近更新</h2>
+{{最近更新}}
+<h2>精品原创</h2>
+<div class="content-panel">
+  <div class="panel-heading">SCP-CN-7421：修订者</div>
+  <div class="panel-body">
+    <p class="panel-by">by 你自己</p>
+    <p>“它从不写新的故事，只是把已有的句子，改得更接近它想要的样子。”</p>
+    <p><a href="#/scp-cn-7421">阅读全文 »</a></p>
+  </div>
+</div>
+<div class="content-panel">
+  <div class="panel-heading">故事：值夜班的第四十一天</div>
+  <div class="panel-body">
+    <p class="panel-by">by 你自己</p>
+    <p>“值班表上只有我的名字。但字迹变了——比我的更工整。”</p>
+    <p><a href="#/tale-41">阅读全文 »</a></p>
+  </div>
+</div>
+<h2>国际站点</h2>
+<table class="intl-table">
+  <tbody>
+    <tr><td><a href="https://scp-wiki-cn.wikidot.com/" rel="noopener">SCP-CN</a></td><td>SCP 基金会中文分部</td></tr>
+    <tr><td><a href="https://scp-wiki.wikidot.com/" rel="noopener">SCP-EN</a></td><td>SCP Foundation · 英文主站</td></tr>
+    <tr><td><a href="https://scp-int.wikidot.com/" rel="noopener">SCP-INT</a></td><td>International Translation Archive</td></tr>
+    <tr><td><a href="https://scp-jp.wikidot.com/" rel="noopener">SCP-JP</a></td><td>SCP財団 · 日语分部</td></tr>
+  </tbody>
+</table>
+<p class="home-fine">本站为非官方个人项目，与 SCP 基金会无隶属关系。站内文字采用 <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.zh" rel="noopener">CC BY-SA 3.0</a> 协议；“SCP 基金会”名称与标志归其各自作者所有。</p>
+</script>
+
+<script type="text/x-page" data-slug="scp-cn-7421" data-title="SCP-CN-7421 — 修订者" data-tags="scp, scp-cn, euclid, 原创" data-days="12" data-updated-days="2.5" data-rating="37">
+<p><strong>项目编号：</strong>SCP-CN-7421</p>
+<p><strong>项目等级：</strong>Euclid</p>
+<p><strong>特殊收容措施：</strong>SCP-CN-7421 的现行宿主站点已由基金会网络部接管，域名解析指向 Site-CN-21 三号机房的离线服务器；任何接入该服务器的终端不得连接外部网络。</p>
+<p>每日 04:00，由两名 D 级人员核对全站修订记录。若发现来源不明的修订，应将该页面快照归档后回滚，并对当日值班人员执行一次 B 级记忆删除。</p>
+<p>禁止任何人员在 SCP-CN-7421 的活动页面上连续停留超过 40 分钟。违反者须立即接受心理评估。</p>
+<h2>描述</h2>
+<p>SCP-CN-7421 是一类寄生于维基类网站的无形实体，其存在仅能通过页面修订记录被间接观测。受影响的页面会在无人操作的情况下被改写；改写后的文本在语法上更通顺、在事实上更准确，并且更接近“读者原本想看到的内容”。</p>
+<p>所有被 SCP-CN-7421 修改过的页面均具有以下特征：</p>
+<ul>
+  <li>修订摘要为空，或是一句无法追溯来源的短句，例如“让它更像真的”；</li>
+  <li>修改时间戳与任何已知用户的操作记录均不重合；</li>
+  <li>同一页面连续被修改的间隔逐次缩短，最短记录为 11 秒。</li>
+</ul>
+<p>值得注意的是，SCP-CN-7421 从未创建过新页面，也从未删除任何内容。它只修改已经存在的句子。</p>
+<blockquote>
+  <p>“我们起初以为它是一个自动校对程序。直到它开始修改事故报告里死者的人数。”<br>——项目主管 陈██，访谈记录 7421-03</p>
+</blockquote>
+<h2>附录 7421-A：事件记录</h2>
+<table>
+  <thead>
+    <tr><th>日期</th><th>事件</th><th>结果</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>2026-09-03</td><td>三号机房站点首次出现无来源修订</td><td>页面已回滚，未发现实体</td></tr>
+    <tr><td>2026-09-17</td><td>SCP-CN-7421 修改了一篇尚未发布的草稿</td><td>草稿转移至离线介质</td></tr>
+    <tr><td>2026-10-02</td><td>值班研究员在页面停留 41 分钟后报告“听见有人在删句子”</td><td>已接受记忆删除</td></tr>
+  </tbody>
+</table>
+<h2>附录 7421-B：最后一次修订</h2>
+<p>2026 年 10 月 9 日，SCP-CN-7421 对本站点主页进行了一次修订。修订后的全文为：</p>
+<blockquote><p>“这里什么都没有。请放心地离开。”</p></blockquote>
+<p>该修订已被回滚。回滚后 11 秒，页面再次被改为同一句话。</p>
+<p class="footer-wikiwalk-nav">« <a href="#/scp-cn-7420">SCP-CN-7420</a> | <a href="#/scp-cn-7421">SCP-CN-7421</a> | <a href="#/scp-cn-7422">SCP-CN-7422</a> »</p>
+</script>
+
+<script type="text/x-page" data-slug="tale-41" data-title="值夜班的第四十一天" data-tags="故事, 原创" data-days="6" data-updated-days="6" data-rating="8">
+<p class="tale-meta">Site-CN-19 · 夜间值守记录 · 第 41 天</p>
+<p>凌晨两点十七分，走廊尽头的灯又亮了。</p>
+<p>我没有抬头。监控屏幕里，那盏灯下面站着一个人，背对着镜头，正在读墙上的值班表。值班表上只有我的名字。</p>
+<p>我按规程做完了三件事：记录、汇报、等待回复。回复在四十分钟后到达，只有一行字：</p>
+<blockquote><p>“今晚没有安排值班。”</p></blockquote>
+<p>我看了看墙上的值班表。上面还是只有我的名字。但字迹变了——比我的更工整。</p>
+<p>于是我给自己泡了第四十一杯咖啡。杯子底下压着一张便签，是我自己的笔迹，写着四个字：</p>
+<p class="tale-note">别回头。</p>
+<p>我没有回头。我只是把监控又调亮了一格，然后继续等天亮。</p>
+<p class="tale-sign">——记录员 ██，Site-CN-19</p>
+</script>
+
+<script type="text/x-page" data-slug="guide" data-title="新手指南" data-tags="指导" data-days="20" data-updated-days="3" data-rating="15">
+<p>这是一份关于本站的使用说明，读完大约需要三分钟。</p>
+<h2>一、这是什么样的站点</h2>
+<p>本站是一个<strong>单文件、纯前端</strong>的 SCP 风格维基：所有页面、修订记录、评分都保存在当前浏览器的 localStorage 里，不上传、不联网、不需要服务器。你可以把它当作自己的写作沙盒，也可以直接改成任何题材的 Wiki。</p>
+<h2>二、如何编辑</h2>
+<ol>
+  <li>打开任意页面，点击右下角的<strong>编辑按钮</strong>，或页面底部的「编辑」链接（快捷键 <kbd>Ctrl</kbd> + <kbd>E</kbd>）。</li>
+  <li>在可视化编辑器里修改标题、标签和正文。工具栏可以加粗、插入标题、引用、列表、表格、图片与折叠块。</li>
+  <li>点击 <strong>保存</strong>（<kbd>Ctrl</kbd> + <kbd>S</kbd>）。每次保存都会生成一个历史版本，可在「历史记录」里查看或恢复。</li>
+  <li>点击 <strong>HTML</strong> 按钮可切换到源码模式，直接写 HTML，适合更复杂的排版。</li>
+</ol>
+<h2>三、页面与导航</h2>
+<p>用左侧边栏或顶部菜单的「工具 → 新建页面」创建新页面，模板分为 SCP 文档、故事、指导三类。页面地址由标题自动生成；正文里可以用 <code>#/页面地址</code> 链接到站内页面，例如 <a href="#/scp-cn-7421">#/scp-cn-7421</a>。指向不存在页面的链接不会报错，打开后会提示你创建它。</p>
+<h2>四、备份与迁移</h2>
+<p>浏览器数据可能因为清理缓存、更换电脑或隐私模式而丢失，<strong>请定期导出备份</strong>：工具 → 导出备份，会得到一个 JSON 文件；在新环境用「导入备份」恢复即可。导入支持「合并」与「覆盖」两种方式。</p>
+<h2>五、快捷操作</h2>
+<table>
+  <thead><tr><th>操作</th><th>快捷键 / 位置</th></tr></thead>
+  <tbody>
+    <tr><td>编辑当前页面</td><td><kbd>Ctrl</kbd> + <kbd>E</kbd></td></tr>
+    <tr><td>保存</td><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td></tr>
+    <tr><td>取消编辑</td><td><kbd>Esc</kbd></td></tr>
+    <tr><td>搜索</td><td><kbd>Ctrl</kbd> + <kbd>K</kbd></td></tr>
+    <tr><td>打印 / 存为 PDF</td><td>页面底部「打印」</td></tr>
+  </tbody>
+</table>
+<h2>六、写作建议</h2>
+<p>一篇标准的 SCP 文档通常包含：项目编号、项目等级、特殊收容措施、描述，以及若干附录（事件记录、访谈、实验日志）。写作时尽量保持临床、克制、公文化的语气——恐惧来自细节的精确，而不是形容词的堆叠。</p>
+<blockquote><p>控制，收容，保护。</p></blockquote>
+<h2>七、注意事项</h2>
+<ul>
+  <li>数据只存在于当前浏览器，换浏览器、换设备都看不到。</li>
+  <li>清理浏览数据（Cookie / 站点数据）会一并清除本站内容。</li>
+  <li>无痕模式下关闭窗口即丢失，请务必先导出备份。</li>
+  <li>插入的图片会以 base64 形式写入本地存储，过大的图片可能超出容量限制。</li>
+</ul>
+</script>
+
+<script type="text/x-page" data-slug="about" data-title="关于本站" data-tags="指导" data-days="25" data-updated-days="5" data-rating="6">
+<p>这是一个私人性质的 SCP 风格维基，用于存放原创文档、故事与设定，也是一个可以随意改写的写作沙盒。</p>
+<h2>关于版式</h2>
+<p>页面版式复刻自 SCP 基金会中文分部的 <strong>Sigma-9</strong> 主题（由 Aelanna 设计，Dr Devan、MScarlet、Sekai_s 等维护），遵循 <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.zh" rel="noopener">CC BY-SA 3.0</a> 协议。站内的 SCP 标志、侧栏图标等素材版权归 SCP 基金会及其作者所有，此处仅作个人学习与致敬之用。</p>
+<h2>关于技术</h2>
+<p>整个站点是一个单独的 HTML 文件，没有任何外部依赖：样式、脚本、图标都内嵌在文件里。内容保存在浏览器 localStorage 中，编辑、版本历史、评分、搜索、导入导出全部在本地完成，断网也能正常使用。</p>
+<h2>免责声明</h2>
+<p>本站与 SCP 基金会官方及中文分部无隶属关系，不代表其立场。站内一切异常项目、组织与人物均为虚构。</p>
+<h2>相关链接</h2>
+<ul>
+  <li><a href="https://scp-wiki-cn.wikidot.com/" rel="noopener">SCP 基金会中文分部</a></li>
+  <li><a href="https://scp-wiki.wikidot.com/" rel="noopener">SCP Foundation（英文主站）</a></li>
+  <li><a href="https://scp-int.wikidot.com/" rel="noopener">SCP 国际翻译站</a></li>
+</ul>
+</script>
+
+<script type="text/x-page" data-slug="all" data-title="所有页面" data-tags="系统" data-days="3" data-updated-days="1.5" data-rating="3">
+<p>本站目前共 <strong>{{页面数}}</strong> 个页面，按类型分组如下。点击标题即可打开；所有页面都可以编辑。</p>
+{{目录}}
+</script>
+
+<script type="text/x-page" data-slug="recent" data-title="最近更新" data-tags="系统" data-days="2" data-updated-days="0.5" data-rating="2">
+<p>以下页面最近被修改过，按更新时间倒序排列。</p>
+{{最近更新}}
+<p class="home-fine">想找点旧东西？可以到 <a href="#/all">所有页面</a> 里翻一翻，或者用右上角的搜索框。</p>
+</script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     0. 小工具
+     ============================================================ */
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function enc(s) { return encodeURIComponent(String(s)); }
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function uid() { return 'p' + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4); }
+  var DAY = 86400000;
+
+  function fmtDate(ts, withTime) {
+    var d = new Date(ts);
+    if (isNaN(d.getTime())) return '未知时间';
+    var s = d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() + '日';
+    if (withTime !== false) s += ' ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+    return s;
+  }
+  function fmtShort(ts) {
+    var d = new Date(ts);
+    if (isNaN(d.getTime())) return '未知';
+    return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+  }
+  function timeAgo(ts) {
+    var diff = Date.now() - ts;
+    if (diff < 60000) return '刚刚';
+    if (diff < 3600000) return Math.floor(diff / 60000) + ' 分钟前';
+    if (diff < DAY) return Math.floor(diff / 3600000) + ' 小时前';
+    if (diff < 30 * DAY) return Math.floor(diff / DAY) + ' 天前';
+    return fmtShort(ts);
+  }
+  function stripTags(html) {
+    var tmp = document.createElement('div');
+    tmp.innerHTML = String(html || '');
+    return (tmp.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function parseTags(str) {
+    return String(str || '').split(/[,，、;；\s]+/).map(function (t) { return t.trim(); }).filter(Boolean).slice(0, 24);
+  }
+  function byUpdated(a, b) { return b.updated - a.updated; }
+
+  /* ============================================================
+     1. 安全过滤（防止导入/粘贴的内容执行脚本）
+     ============================================================ */
+  var ALLOWED_TAGS = ('a abbr b blockquote br caption center code col colgroup dd del details div dl dt em figcaption figure ' +
+    'h1 h2 h3 h4 h5 h6 hr i img ins kbd li mark ol p pre q s small span strike strong sub summary sup table tbody td tfoot th thead tr u ul var').split(' ');
+  var ALLOWED_ATTRS = ('href src alt title class style colspan rowspan width height align valign start type target rel id').split(' ');
+  var DROP_TAGS = 'script,style,iframe,object,embed,form,input,button,textarea,select,link,meta,base,svg,math,template,noscript,audio,video,source,canvas,track';
+
+  function sanitize(html) {
+    var tpl = document.createElement('template');
+    tpl.innerHTML = String(html == null ? '' : html);
+    $$(DROP_TAGS, tpl.content).forEach(function (n) { n.remove(); });
+    var guard = 0;
+    while (guard++ < 8) {
+      var bad = $$('*', tpl.content).filter(function (el) {
+        return ALLOWED_TAGS.indexOf(el.tagName.toLowerCase()) < 0;
+      });
+      if (!bad.length) break;
+      bad.forEach(function (el) {
+        var parent = el.parentNode;
+        if (!parent) return;
+        while (el.firstChild) parent.insertBefore(el.firstChild, el);
+        parent.removeChild(el);
+      });
+    }
+    $$('*', tpl.content).forEach(function (el) {
+      Array.prototype.slice.call(el.attributes).forEach(function (attr) {
+        var name = attr.name.toLowerCase();
+        if (name.indexOf('on') === 0) { el.removeAttribute(attr.name); return; }
+        if (name === 'href' || name === 'src') {
+          if (/^\s*(javascript|vbscript|data:text\/html)/i.test(attr.value)) el.removeAttribute(attr.name);
+          return;
+        }
+        if (name === 'style') {
+          if (/expression|javascript:|url\s*\(\s*['"]?javascript:/i.test(attr.value)) el.removeAttribute(attr.name);
+          return;
+        }
+        if (ALLOWED_ATTRS.indexOf(name) < 0 && name.indexOf('data-') !== 0 && name.indexOf('aria-') !== 0) {
+          el.removeAttribute(attr.name);
+        }
+      });
+      if (el.tagName === 'IMG') {
+        var src = el.getAttribute('src') || '';
+        if (!/^(https?:\/\/|data:image\/)/i.test(src)) el.parentNode && el.parentNode.removeChild(el);
+      }
+    });
+    return tpl.innerHTML;
+  }
+
+  /* ============================================================
+     2. 常量与状态
+     ============================================================ */
+  var STORAGE_KEY = 'scp-personal-wiki-v1';
+  var APP_ID = 'scp-personal-wiki';
+  var MAX_VERSIONS = 40;
+
+  var TEMPLATES = {
+    blank: '<p>从这里开始写。</p>',
+    scp: '<p><strong>项目编号：</strong>SCP-CN-XXXX</p>\n' +
+      '<p><strong>项目等级：</strong>Safe</p>\n' +
+      '<p><strong>特殊收容措施：</strong>在此描述收容该异常所需的程序、设施与人员配置。</p>\n' +
+      '<h2>描述</h2>\n<p>在此描述异常的性质、外观与行为。</p>\n' +
+      '<h2>附录：</h2>\n<p>补充材料、访谈记录或事件报告。</p>',
+    tale: '<p>故事从一个普通的夜晚开始。</p>',
+    guide: '<h2>标题</h2>\n<p>正文。</p>'
+  };
+
+  var state = null;
+  var storageOK = true;
+  var booting = true;
+  var ui = { editing: false, isNew: false, slug: null, dirty: false, mode: 'visual', lastRendered: '' };
+
+  /* ============================================================
+     3. 数据：默认内容 / 读取 / 保存
+     ============================================================ */
+  function defaultState() {
+    var pages = [];
+    var base = Date.now();
+    $$('script[type="text/x-page"]').forEach(function (node) {
+      var d = node.dataset;
+      var age = parseFloat(d.days || '4');
+      var upd = d.updatedDays != null ? parseFloat(d.updatedDays) : age;
+      pages.push({
+        id: uid(),
+        slug: String(d.slug || ''),
+        title: String(d.title || d.slug || '未命名'),
+        tags: parseTags(d.tags || ''),
+        content: sanitize(node.textContent.trim()),
+        created: base - age * DAY,
+        updated: base - upd * DAY,
+        rating: parseInt(d.rating || '0', 10) || 0,
+        myVote: 0,
+        rev: 1,
+        versions: []
+      });
+    });
+    return {
+      app: APP_ID,
+      version: 1,
+      site: { title: 'SCP基金会', subtitle: '控制，收容，保护', home: 'main' },
+      pages: pages,
+      savedAt: Date.now()
+    };
+  }
+
+  function normalizeVersion(v) {
+    return {
+      ts: +v.ts || Date.now(),
+      title: v.title || '',
+      tags: Array.isArray(v.tags) ? v.tags.map(String) : [],
+      content: sanitize(typeof v.content === 'string' ? v.content : ''),
+      rating: Number(v.rating) || 0,
+      myVote: v.myVote === 1 || v.myVote === -1 ? v.myVote : 0
+    };
+  }
+
+  function normalizePage(p) {
+    return {
+      id: p.id || uid(),
+      slug: String(p.slug || '').trim() || 'page-' + Math.random().toString(36).slice(2, 7),
+      title: String(p.title || p.slug || '未命名页面'),
+      tags: Array.isArray(p.tags) ? p.tags.map(String).slice(0, 24) : [],
+      content: sanitize(typeof p.content === 'string' ? p.content : ''),
+      created: +p.created || Date.now(),
+      updated: +p.updated || +p.created || Date.now(),
+      rating: Number(p.rating) || 0,
+      myVote: p.myVote === 1 || p.myVote === -1 ? p.myVote : 0,
+      rev: Number(p.rev) || 1,
+      versions: Array.isArray(p.versions) ? p.versions.slice(0, MAX_VERSIONS).map(normalizeVersion) : []
+    };
+  }
+
+  function normalize(data) {
+    var s = {
+      app: APP_ID,
+      version: 1,
+      site: {
+        title: (data.site && data.site.title) || 'SCP基金会',
+        subtitle: (data.site && data.site.subtitle) || '控制，收容，保护',
+        home: (data.site && data.site.home) || 'main'
+      },
+      pages: (data.pages || []).map(normalizePage),
+      savedAt: data.savedAt || Date.now()
+    };
+    if (!s.pages.length) return defaultState();
+    var hasHome = s.pages.some(function (p) { return p.slug === s.site.home; });
+    if (!hasHome) s.site.home = s.pages[0].slug;
+    return s;
+  }
+
+  function load() {
+    var raw = null;
+    try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { storageOK = false; }
+    if (raw) {
+      try {
+        var data = JSON.parse(raw);
+        if (data && data.app === APP_ID && Array.isArray(data.pages) && data.pages.length) {
+          state = normalize(data);
+          return true;
+        }
+      } catch (e) {
+        console.warn('本地存档解析失败，已载入默认内容', e);
+      }
+    }
+    state = defaultState();
+    writeStorage(true);
+    return false;
+  }
+
+  function updateStorageState() {
+    var el = $('#storage-state');
+    if (!el) return;
+    el.textContent = storageOK ? '个人站' : '存储不可用';
+    el.style.color = storageOK ? '' : '#f99';
+    el.title = storageOK ? '所有内容保存在本机浏览器中' : '浏览器禁止了本地存储，请及时导出备份';
+  }
+
+  function writeStorage(silent) {
+    state.savedAt = Date.now();
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      storageOK = true;
+    } catch (e) {
+      storageOK = false;
+      if (!silent && !booting) {
+        toast('保存失败：' + (e && e.name === 'QuotaExceededError' ? '本地存储空间已满，请导出备份后删除一些图片' : e.message), 'error', 6000);
+      }
+    }
+    updateStorageState();
+  }
+
+  /* ---------- 线上发布内容（GitHub Pages 等静态托管） ---------- */
+  function isHttp() {
+    return location.protocol === 'http:' || location.protocol === 'https:';
+  }
+
+  function fetchPublished() {
+    return fetch('content.json?t=' + Date.now(), { cache: 'no-store' }).then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }).then(function (data) {
+      if (!data || data.app !== APP_ID || !Array.isArray(data.pages) || !data.pages.length) {
+        throw new Error('content.json 格式不正确');
+      }
+      return data;
+    });
+  }
+
+  function refreshFromPublished() {
+    if (!isHttp()) {
+      openModal({
+        title: '从线上内容刷新',
+        body: '<p>这个功能需要在 <strong>http(s)</strong> 环境下使用，例如 GitHub Pages 或本地服务器。</p>' +
+          '<p class="form-hint">直接双击打开的本地文件没有可读取的线上 content.json。</p>',
+        buttons: [{ label: '知道了' }]
+      });
+      return;
+    }
+    openModal({
+      title: '从线上内容刷新',
+      body: '<p>将读取服务器上的 <code>content.json</code>，并用它覆盖当前浏览器中的全部页面与设置。</p>' +
+        '<p class="form-hint">未导出的本地修改会丢失。如果只是想保留草稿，请先导出备份。</p>',
+      buttons: [
+        { label: '取消' },
+        {
+          label: '覆盖并刷新', danger: true, onClick: function () {
+            fetchPublished().then(function (data) {
+              state = normalize(data);
+              writeStorage(true);
+              try { history.replaceState(null, '', '#/' + enc(state.site.home)); }
+              catch (e) { location.hash = '#/' + enc(state.site.home); }
+              renderAll();
+              toast('已从线上内容刷新');
+            }).catch(function (err) {
+              toast('读取 content.json 失败：' + err.message, 'error', 6000);
+            });
+            return true;
+          }
+        }
+      ]
+    });
+  }
+
+  function getPage(slug) {
+    for (var i = 0; i < state.pages.length; i++) {
+      if (state.pages[i].slug === slug) return state.pages[i];
+    }
+    return null;
+  }
+
+  function pushVersion(page) {
+    page.versions.unshift({
+      ts: page.updated,
+      title: page.title,
+      tags: page.tags.slice(),
+      content: page.content,
+      rating: page.rating,
+      myVote: page.myVote
+    });
+    page.versions = page.versions.slice(0, MAX_VERSIONS);
+  }
+
+  /* ============================================================
+     4. 渲染：整体 / 侧栏 / 顶栏 / 页面
+     ============================================================ */
+  function renderAll() {
+    renderSiteMeta();
+    renderSidebar();
+    renderTopMenus();
+    route();
+    updateFab();
+  }
+
+  function renderSiteMeta() {
+    $('#site-title').textContent = state.site.title;
+    $('#site-subtitle').textContent = state.site.subtitle;
+    $('#site-title').setAttribute('href', '#/' + enc(state.site.home));
+    $('#top-home').setAttribute('href', '#/' + enc(state.site.home));
+    document.title = state.site.title;
+    updateStorageState();
+  }
+
+  function sideItem(icon, label, href, attrs) {
+    return '<div class="menu-item"><span class="icon icon-' + icon + '"></span><a href="' + href + '"' + (attrs || '') + '>' + esc(label) + '</a></div>';
+  }
+
+  function renderSidebar() {
+    var scps = state.pages.filter(function (p) { return p.tags.indexOf('scp') > -1; }).sort(byUpdated);
+    var tales = state.pages.filter(function (p) { return p.tags.indexOf('故事') > -1; }).sort(byUpdated);
+    var html = [];
+
+    html.push('<div class="side-block tint">');
+    html.push('<div class="heading">新人资讯</div>');
+    html.push(sideItem('help', '新手指南', '#/guide'));
+    html.push(sideItem('help', '关于本站', '#/about'));
+    html.push(sideItem('main', '所有页面', '#/all'));
+    html.push(sideItem('default', '最近更新', '#/recent'));
+    html.push('<div class="menu-item"><span class="icon icon-default"></span><a href="#" data-action="random">随机页面</a></div>');
+    html.push('</div>');
+
+    html.push('<div class="side-block">');
+    html.push('<div class="menu-item"><span class="icon icon-main"></span><a href="#/' + enc(state.site.home) + '">主页</a></div>');
+    if (scps.length) {
+      html.push('<div class="heading">SCP-CN 系列</div>');
+      scps.forEach(function (p) { html.push(sideItem('series', p.title, '#/' + enc(p.slug))); });
+    }
+    if (tales.length) {
+      html.push('<div class="heading">故事</div>');
+      tales.forEach(function (p) { html.push(sideItem('series', p.title, '#/' + enc(p.slug))); });
+    }
+    html.push('<div class="heading">图书馆</div>');
+    html.push(sideItem('default', '所有页面', '#/all'));
+    html.push(sideItem('default', '最近更新', '#/recent'));
+    html.push('</div>');
+
+    html.push('<div class="side-block">');
+    html.push('<div class="heading">站点工具</div>');
+    html.push('<div class="menu-item"><span class="icon icon-main"></span><a href="#" data-action="edit">编辑本页</a></div>');
+    html.push('<div class="menu-item"><span class="icon icon-main"></span><a href="#" data-action="new-page">新建页面</a></div>');
+    html.push('<div class="menu-item"><span class="icon icon-default"></span><a href="#" data-action="import">导入备份</a></div>');
+    html.push('<div class="menu-item"><span class="icon icon-default"></span><a href="#" data-action="export">导出备份</a></div>');
+    html.push('<div class="menu-item"><span class="icon icon-default"></span><a href="#" data-action="settings">站点设置</a></div>');
+    html.push('<div class="menu-item"><span class="icon icon-default"></span><a href="#" data-action="reset">恢复默认内容</a></div>');
+    html.push('<div class="menu-item"><span class="icon icon-default"></span><a href="#" data-action="sync-online">从线上内容刷新</a></div>');
+    html.push('</div>');
+
+    html.push('<div class="side-block">');
+    html.push('<div class="heading">相关网站</div>');
+    html.push('<div class="menu-item"><span class="icon icon-forum"></span><a href="https://scp-wiki-cn.wikidot.com/" target="_blank" rel="noopener">SCP基金会中文分部</a></div>');
+    html.push('<div class="menu-item"><span class="icon icon-forum"></span><a href="https://scp-int.wikidot.com/" target="_blank" rel="noopener">SCP国际翻译站</a></div>');
+    html.push('</div>');
+
+    html.push('<div class="side-block media">');
+    html.push('<div class="heading">授权</div>');
+    html.push('<p class="cc-line"><a href="https://creativecommons.org/licenses/by-sa/3.0/deed.zh" target="_blank" rel="noopener"><span class="cc-badge">CC BY-SA 3.0</span></a></p>');
+    html.push('<p class="side-fine" style="text-align:center">© SCP基金会<br><a href="https://scp-wiki-cn.wikidot.com/licensing-guide" target="_blank" rel="noopener">授权指南</a></p>');
+    html.push('</div>');
+
+    $('#side-bar').innerHTML = html.join('');
+  }
+
+  function renderTopMenus() {
+    var scps = state.pages.filter(function (p) { return p.tags.indexOf('scp') > -1; }).sort(byUpdated);
+    var tales = state.pages.filter(function (p) { return p.tags.indexOf('故事') > -1; }).sort(byUpdated);
+    var empty = '<li><a href="#/all">暂无条目</a></li>';
+    $('#menu-scp').innerHTML = scps.length ? scps.map(function (p) {
+      return '<li><a href="#/' + enc(p.slug) + '">' + esc(p.title) + '</a></li>';
+    }).join('') : empty;
+    $('#menu-tale').innerHTML = tales.length ? tales.map(function (p) {
+      return '<li><a href="#/' + enc(p.slug) + '">' + esc(p.title) + '</a></li>';
+    }).join('') : empty;
+  }
+
+  function updateFab() {
+    var fab = $('#fab');
+    if (!fab) return;
+    fab.hidden = ui.editing || !getPage(ui.lastRendered);
+  }
+
+  function linkifyExternal(root) {
+    $$('a[href^="http"]', root).forEach(function (a) {
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+    });
+  }
+
+  function expandTokens(html) {
+    return String(html || '')
+      .replace(/\{\{\s*页面数\s*\}\}/g, function () { return String(state.pages.length); })
+      .replace(/\{\{\s*目录\s*\}\}/g, function () { return renderDirectory(); })
+      .replace(/\{\{\s*最近更新\s*\}\}/g, function () { return renderRecent(); })
+      .replace(/\{\{\s*最近更新日期\s*\}\}/g, function () {
+        var latest = state.pages.reduce(function (m, p) { return Math.max(m, p.updated); }, 0);
+        return esc(fmtDate(latest));
+      })
+      .replace(/\{\{\s*日期\s*\}\}/g, function () { return esc(fmtDate(Date.now(), false)); })
+      .replace(/\{\{\s*站点名\s*\}\}/g, function () { return esc(state.site.title); });
+  }
+
+  function renderDirectory() {
+    var groups = {};
+    var order = ['SCP-CN 系列', '故事', '指导与说明', '其他页面', '系统'];
+    state.pages.slice().sort(function (a, b) {
+      return String(a.title).localeCompare(String(b.title), 'zh-Hans-CN');
+    }).forEach(function (p) {
+      var cat = '其他页面';
+      if (p.tags.indexOf('系统') > -1) cat = '系统';
+      else if (p.tags.indexOf('scp') > -1) cat = 'SCP-CN 系列';
+      else if (p.tags.indexOf('故事') > -1) cat = '故事';
+      else if (p.tags.indexOf('指导') > -1) cat = '指导与说明';
+      (groups[cat] = groups[cat] || []).push(p);
+    });
+    var html = '<div class="page-directory">';
+    order.forEach(function (cat) {
+      var list = groups[cat];
+      if (!list || !list.length) return;
+      html += '<h3>' + cat + ' <span class="meta">（' + list.length + '）</span></h3><ul class="page-list">';
+      list.forEach(function (p) {
+        html += '<li><a href="#/' + enc(p.slug) + '">' + esc(p.title) + '</a><span class="meta">' + esc(p.tags.join(' · ')) + '</span></li>';
+      });
+      html += '</ul>';
+    });
+    return html + '</div>';
+  }
+
+  function renderRecent() {
+    var list = state.pages.slice().sort(byUpdated).slice(0, 15);
+    var html = '<table class="recent-table"><thead><tr><th>页面</th><th>标签</th><th>最后更新</th></tr></thead><tbody>';
+    list.forEach(function (p) {
+      html += '<tr><td><a href="#/' + enc(p.slug) + '">' + esc(p.title) + '</a></td><td>' + esc(p.tags.join(', ')) + '</td><td>' + esc(fmtShort(p.updated)) + '</td></tr>';
+    });
+    return html + '</tbody></table>';
+  }
+
+  function renderRating(page) {
+    var box = $('#page-rating');
+    box.hidden = false;
+    box.innerHTML = '<div class="page-rate-widget-box">' +
+      '<span class="rate-points">评分: <span class="rate-number">' + (page.rating >= 0 ? '+' : '') + page.rating + '</span></span>' +
+      '<span class="rate-btn"><a href="#" data-rate="up" title="好评">+</a></span>' +
+      '<span class="rate-btn"><a href="#" data-rate="down" title="差评">−</a></span>' +
+      '<span class="rate-btn rate-cancel"><a href="#" data-rate="cancel" title="取消评分">x</a></span>' +
+      '<span class="rate-btn rate-info"><a href="#" data-action="rate-help" title="评分说明">i</a></span>' +
+      '</div>';
+  }
+
+  function renderTags(page, hidden) {
+    var el = $('#page-tags');
+    if (hidden) { el.hidden = true; el.innerHTML = ''; return; }
+    el.hidden = false;
+    el.innerHTML = page.tags.length ? '标签: ' + page.tags.map(function (t) {
+      return '<a href="#/tag/' + enc(t) + '">' + esc(t) + '</a>';
+    }).join(' ') : '';
+  }
+
+  function renderOptions(page) {
+    var el = $('#page-options-bottom');
+    el.hidden = false;
+    el.innerHTML = '<div class="page-version">页面版本: ' + (page.rev || 1) + '，最后编辑于: ' + esc(fmtDate(page.updated)) + '</div>' +
+      '<div class="page-options">' +
+      '<a href="#" data-action="edit">编辑</a>' +
+      '<a href="#" data-action="tags">标签</a>' +
+      '<a href="#" data-action="history">历史记录</a>' +
+      '<a href="#" data-action="print">打印</a>' +
+      '<a href="#" data-action="delete">删除</a>' +
+      '</div>';
+  }
+
+  function renderPage(page) {
+    ui.lastRendered = page.slug;
+    var isHome = page.slug === state.site.home;
+    $('#editor').hidden = true;
+    $('#page-content').hidden = false;
+    $('#page-title').hidden = isHome;
+    $('#page-title').textContent = page.title;
+    $('#page-rating').hidden = isHome;
+    if (isHome) $('#page-rating').innerHTML = '';
+    else renderRating(page);
+    $('#page-content').className = isHome ? 'is-home' : '';
+    $('#page-content').innerHTML = expandTokens(page.content);
+    linkifyExternal($('#page-content'));
+    renderTags(page, isHome);
+    renderOptions(page);
+    document.title = (isHome ? '' : page.title + ' - ') + state.site.title;
+    updateFab();
+    window.scrollTo(0, 0);
+  }
+
+  function renderTagPage(tag) {
+    var list = state.pages.filter(function (p) { return p.tags.indexOf(tag) > -1; }).sort(byUpdated);
+    $('#editor').hidden = true;
+    $('#page-title').hidden = false;
+    $('#page-title').textContent = '标签：' + tag;
+    $('#page-rating').hidden = true;
+    $('#page-rating').innerHTML = '';
+    var el = $('#page-content');
+    el.className = '';
+    el.hidden = false;
+    var html = '<p>共 <strong>' + list.length + '</strong> 个页面使用了标签「' + esc(tag) + '」。</p>';
+    if (list.length) {
+      html += '<ul class="page-list">' + list.map(function (p) {
+        return '<li><a href="#/' + enc(p.slug) + '">' + esc(p.title) + '</a><span class="meta">' + esc(fmtShort(p.updated)) + '</span></li>';
+      }).join('') + '</ul>';
+    }
+    el.innerHTML = html;
+    $('#page-tags').hidden = true;
+    $('#page-tags').innerHTML = '';
+    $('#page-options-bottom').hidden = true;
+    document.title = '标签：' + tag + ' - ' + state.site.title;
+    updateFab();
+    window.scrollTo(0, 0);
+  }
+
+  function renderMissing(slug) {
+    ui.lastRendered = slug;
+    $('#editor').hidden = true;
+    $('#page-title').hidden = false;
+    $('#page-title').textContent = slug;
+    $('#page-rating').hidden = true;
+    $('#page-rating').innerHTML = '';
+    $('#page-tags').hidden = true;
+    $('#page-tags').innerHTML = '';
+    $('#page-options-bottom').hidden = true;
+    var el = $('#page-content');
+    el.className = '';
+    el.hidden = false;
+    el.innerHTML = '<p class="missing-note">此页面尚不存在。</p>' +
+      '<p>要创建「' + esc(slug) + '」吗？它会成为一个空白页面，创建后可以直接编辑。</p>' +
+      '<p><a href="#" data-action="new-page" data-title="' + esc(slug) + '">＋ 创建这个页面</a>　·　<a href="#/' + enc(state.site.home) + '">返回主页</a></p>';
+    document.title = '页面不存在 - ' + state.site.title;
+    updateFab();
+    window.scrollTo(0, 0);
+  }
+
+  /* ============================================================
+     5. 路由
+     ============================================================ */
+  function decodeHash() {
+    var h = location.hash || '';
+    if (h.indexOf('#/') === 0) h = h.slice(2);
+    else h = '';
+    try { h = decodeURIComponent(h); } catch (e) { /* 保留原样 */ }
+    return h || state.site.home;
+  }
+
+  function route() {
+    var slug = decodeHash();
+    ui.lastRendered = slug;
+    document.body.classList.remove('menu-open');
+    $('#search-results').hidden = true;
+    if (slug.indexOf('tag/') === 0) { renderTagPage(slug.slice(4)); return; }
+    var page = getPage(slug);
+    if (page) renderPage(page);
+    else renderMissing(slug);
+  }
+
+  function navigate(slug) {
+    var target = '#/' + enc(slug);
+    if (location.hash !== target) {
+      try { history.replaceState(null, '', target); }
+      catch (e) { location.hash = target; }
+    }
+    route();
+  }
+
+  /* ============================================================
+     6. 编辑器
+     ============================================================ */
+  function startEdit(slug, isNew) {
+    var page = getPage(slug);
+    if (!page) { toast('页面不存在，无法编辑', 'error'); return; }
+    if (ui.editing) { toast('请先保存或取消当前编辑'); return; }
+    ui.editing = true;
+    ui.isNew = !!isNew;
+    ui.slug = slug;
+    ui.dirty = false;
+    document.body.classList.add('is-editing');
+    $('#page-title').hidden = true;
+    $('#page-content').hidden = true;
+    $('#page-rating').hidden = true;
+    $('#page-tags').hidden = true;
+    $('#page-options-bottom').hidden = true;
+    $('#editor').hidden = false;
+    $('#edit-title').value = page.title;
+    $('#edit-tags').value = page.tags.join(', ');
+    $('#edit-body').innerHTML = page.content;
+    $('#edit-source').value = page.content;
+    $('#btn-save').textContent = '保存';
+    setEditorMode('visual');
+    document.title = '编辑：' + page.title;
+    $('#edit-body').focus();
+    window.scrollTo(0, 0);
+    updateFab();
+  }
+
+  function setEditorMode(mode) {
+    var src = $('#edit-source');
+    var body = $('#edit-body');
+    if (mode === 'source') {
+      src.value = body.innerHTML;
+      src.hidden = false;
+      body.hidden = true;
+      src.focus();
+    } else {
+      body.innerHTML = sanitize(src.value);
+      body.hidden = false;
+      src.hidden = true;
+      body.focus();
+    }
+    ui.mode = mode;
+    $('#btn-source').classList.toggle('active', mode === 'source');
+  }
+
+  function exitEditorUI() {
+    ui.editing = false;
+    ui.isNew = false;
+    ui.dirty = false;
+    document.body.classList.remove('is-editing');
+    $('#editor').hidden = true;
+    $('#page-title').hidden = false;
+    $('#page-content').hidden = false;
+    $('#page-tags').hidden = false;
+    $('#page-options-bottom').hidden = false;
+  }
+
+  function markDirty() {
+    if (!ui.editing) return;
+    ui.dirty = true;
+    $('#btn-save').textContent = '保存 •';
+  }
+
+  function saveEdit() {
+    if (!ui.editing) return;
+    var page = getPage(ui.slug);
+    if (!page) { cancelEdit(true); return; }
+    var title = $('#edit-title').value.trim();
+    if (!title) { toast('标题不能为空', 'error'); $('#edit-title').focus(); return; }
+    var isNew = ui.isNew;
+    var content = sanitize(ui.mode === 'source' ? $('#edit-source').value : $('#edit-body').innerHTML).trim();
+    var tags = parseTags($('#edit-tags').value);
+    if (!isNew) pushVersion(page);
+    page.title = title;
+    page.tags = tags;
+    page.content = content;
+    page.updated = Date.now();
+    if (!isNew) page.rev = (page.rev || 1) + 1;
+    writeStorage();
+    exitEditorUI();
+    navigate(page.slug);
+    toast(isNew ? '页面已创建' : '已保存');
+  }
+
+  function cancelEdit(silent) {
+    if (!ui.editing) return;
+    if (!silent && ui.dirty && !window.confirm('放弃本次修改？')) return;
+    var page = getPage(ui.slug);
+    var wasNew = ui.isNew;
+    if (wasNew) {
+      state.pages = state.pages.filter(function (p) { return p.slug !== ui.slug; });
+      writeStorage(true);
+    }
+    var target = wasNew ? state.site.home : (page ? page.slug : state.site.home);
+    exitEditorUI();
+    navigate(target);
+    toast(wasNew ? '已取消创建' : '已取消编辑');
+  }
+
+  function insertHTML(html) {
+    try { document.execCommand('insertHTML', false, html); }
+    catch (e) {
+      var body = $('#edit-body');
+      body.innerHTML += html;
+    }
+  }
+
+  function applyCommand(cmd, value) {
+    if (ui.mode === 'source') { toast('源码模式下请直接编辑 HTML', 'error'); return; }
+    var body = $('#edit-body');
+    body.focus();
+    try { document.execCommand('styleWithCSS', false, false); } catch (e) { /* ignore */ }
+    switch (cmd) {
+      case 'bold':
+      case 'italic':
+      case 'underline':
+      case 'strikeThrough':
+      case 'insertUnorderedList':
+      case 'insertOrderedList':
+        document.execCommand(cmd, false, null);
+        break;
+      case 'formatBlock':
+        document.execCommand('formatBlock', false, '<' + value + '>');
+        break;
+      case 'hr':
+        document.execCommand('insertHorizontalRule', false, null);
+        break;
+      case 'removeFormat':
+        document.execCommand('removeFormat', false, null);
+        document.execCommand('formatBlock', false, '<p>');
+        break;
+      case 'link': {
+        var url = window.prompt('链接地址（站内页面可写 #/页面地址）', 'https://');
+        if (url) document.execCommand('createLink', false, url);
+        break;
+      }
+      case 'image':
+        $('#image-file').click();
+        break;
+      case 'table':
+        insertHTML('<table><thead><tr><th>表头</th><th>表头</th><th>表头</th></tr></thead>' +
+          '<tbody><tr><td>内容</td><td>内容</td><td>内容</td></tr><tr><td>内容</td><td>内容</td><td>内容</td></tr></tbody></table><p><br></p>');
+        break;
+      case 'collapsible':
+        insertHTML('<details><summary>展开查看</summary><p>这里是被折叠的内容。</p></details><p><br></p>');
+        break;
+      case 'code':
+        insertHTML('<pre><code>代码</code></pre><p><br></p>');
+        break;
+      default:
+        break;
+    }
+    markDirty();
+  }
+
+  /* ============================================================
+     7. 对话框 / 提示
+     ============================================================ */
+  function toast(msg, type, ms) {
+    var root = $('#toast-root');
+    var el = document.createElement('div');
+    el.className = 'toast' + (type === 'error' ? ' error' : '');
+    el.textContent = msg;
+    root.appendChild(el);
+    window.setTimeout(function () {
+      el.style.transition = 'opacity .3s';
+      el.style.opacity = '0';
+      window.setTimeout(function () { el.remove(); }, 320);
+    }, ms || 2800);
+  }
+
+  function closeModal() {
+    var root = $('#modal-root');
+    root.hidden = true;
+    root.innerHTML = '';
+    root.onclick = null;
+  }
+
+  function openModal(opts) {
+    var root = $('#modal-root');
+    root.hidden = false;
+    root.innerHTML = '<div class="modal' + (opts.wide ? ' wide' : '') + '" role="dialog" aria-modal="true">' +
+      '<div class="modal-head"><h3>' + esc(opts.title) + '</h3><button type="button" class="modal-close" aria-label="关闭">×</button></div>' +
+      '<div class="modal-body">' + (opts.body || '') + '</div>' +
+      '<div class="modal-foot"></div>' +
+      '</div>';
+    var foot = $('.modal-foot', root);
+    (opts.buttons || [{ label: '关闭' }]).forEach(function (spec) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn' + (spec.primary ? ' primary' : '') + (spec.danger ? ' danger' : '');
+      btn.textContent = spec.label;
+      btn.addEventListener('click', function () {
+        var result = true;
+        if (typeof spec.onClick === 'function') result = spec.onClick(btn);
+        if (result === false) return;
+        closeModal();
+      });
+      foot.appendChild(btn);
+    });
+    $('.modal-close', root).addEventListener('click', closeModal);
+    root.onclick = function (e) { if (e.target === root) closeModal(); };
+    if (opts.onMount) opts.onMount(root);
+    var focusEl = root.querySelector('.modal-body input, .modal-body select, .modal-body textarea, .btn.primary');
+    if (focusEl) focusEl.focus();
+  }
+
+  /* ============================================================
+     8. 各种操作
+     ============================================================ */
+  function makeSlug(title) {
+    var s = String(title || '').trim().toLowerCase()
+      .replace(/[\s_]+/g, '-')
+      .replace(/[^0-9a-z\u4e00-\u9fa5-]/g, '')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    return s || 'page-' + Date.now().toString(36);
+  }
+
+  function uniqueSlug(slug) {
+    var s = slug || 'page';
+    var i = 2;
+    while (getPage(s)) { s = slug + '-' + i; i += 1; }
+    return s;
+  }
+
+  function templateTags(tpl) {
+    if (tpl === 'scp') return ['scp', '原创'];
+    if (tpl === 'tale') return ['故事', '原创'];
+    if (tpl === 'guide') return ['指导'];
+    return [];
+  }
+
+  function openNewPage(presetTitle) {
+    var templates = [['blank', '空白页面'], ['scp', 'SCP 项目文档'], ['tale', '基金会故事'], ['guide', '指导 / 说明']];
+    openModal({
+      title: '新建页面',
+      body: '<div class="form-row"><label for="np-title">页面标题</label>' +
+        '<input id="np-title" type="text" value="' + esc(presetTitle || '') + '" placeholder="例如：SCP-CN-8000 寂静之声"></div>' +
+        '<div class="form-row"><label for="np-template">页面模板</label><select id="np-template">' +
+        templates.map(function (t) { return '<option value="' + t[0] + '">' + t[1] + '</option>'; }).join('') + '</select></div>' +
+        '<div class="form-row"><label for="np-tags">标签</label><input id="np-tags" type="text" placeholder="用逗号分隔，例如 scp, euclid, 原创"></div>' +
+        '<p class="form-hint">页面地址：<code id="np-slug">…</code>（创建后可随时改标题）</p>',
+      buttons: [
+        { label: '取消' },
+        {
+          label: '创建并编辑', primary: true, onClick: function () {
+            var title = $('#np-title').value.trim();
+            if (!title) { toast('请填写页面标题', 'error'); $('#np-title').focus(); return false; }
+            createPage(title, $('#np-template').value, parseTags($('#np-tags').value));
+            return true;
+          }
+        }
+      ],
+      onMount: function () {
+        var titleEl = $('#np-title');
+        var slugEl = $('#np-slug');
+        var update = function () { slugEl.textContent = '#/' + makeSlug(titleEl.value); };
+        titleEl.addEventListener('input', update);
+        update();
+        titleEl.focus();
+        titleEl.select();
+      }
+    });
+  }
+
+  function createPage(title, tpl, tags) {
+    var slug = uniqueSlug(makeSlug(title));
+    var now = Date.now();
+    var page = {
+      id: uid(),
+      slug: slug,
+      title: title,
+      tags: tags.length ? tags : templateTags(tpl),
+      content: sanitize(TEMPLATES[tpl] || TEMPLATES.blank),
+      created: now,
+      updated: now,
+      rating: 0,
+      myVote: 0,
+      rev: 1,
+      versions: []
+    };
+    state.pages.push(page);
+    writeStorage();
+    renderSidebar();
+    renderTopMenus();
+    navigate(slug);
+    startEdit(slug, true);
+    toast('页面已创建，编辑完成后记得保存');
+  }
+
+  function openTagEditor() {
+    var page = getPage(ui.lastRendered);
+    if (!page) { toast('请先打开一个页面'); return; }
+    openModal({
+      title: '编辑标签',
+      body: '<div class="form-row"><label for="tag-input">标签（用逗号分隔）</label>' +
+        '<input id="tag-input" type="text" value="' + esc(page.tags.join(', ')) + '"></div>' +
+        '<p class="form-hint">标签会显示在页面底部，并用于「所有页面」的分组与标签页。</p>',
+      buttons: [
+        { label: '取消' },
+        {
+          label: '保存', primary: true, onClick: function () {
+            page.tags = parseTags($('#tag-input').value);
+            page.updated = Date.now();
+            page.rev = (page.rev || 1) + 1;
+            writeStorage();
+            renderSidebar();
+            renderTopMenus();
+            navigate(page.slug);
+            toast('标签已更新');
+            return true;
+          }
+        }
+      ]
+    });
+  }
+
+  function openHistory() {
+    var page = getPage(ui.lastRendered);
+    if (!page) { toast('请先打开一个页面'); return; }
+    var rows = '<tr><td>当前</td><td>' + esc(fmtDate(page.updated)) + '</td><td>' + esc(page.title) + '</td><td>' + page.content.length + ' 字符</td><td></td></tr>';
+    page.versions.forEach(function (v, i) {
+      rows += '<tr><td>v' + Math.max(1, (page.rev || 1) - i - 1) + '</td><td>' + esc(fmtDate(v.ts)) + '</td>' +
+        '<td>' + esc(v.title) + '</td><td>' + String(v.content || '').length + ' 字符</td>' +
+        '<td><button type="button" class="link-btn" data-hist="view" data-index="' + i + '">查看</button>' +
+        '<button type="button" class="link-btn" data-hist="restore" data-index="' + i + '">恢复</button></td></tr>';
+    });
+    openModal({
+      title: '修订记录：' + page.title,
+      wide: true,
+      body: page.versions.length
+        ? '<table class="history-table"><thead><tr><th>版本</th><th>时间</th><th>标题</th><th>长度</th><th>操作</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+          '<p class="form-hint">最多保留最近 ' + MAX_VERSIONS + ' 个版本。恢复旧版本时，当前内容会先被保存为一个新版本。</p>'
+        : '<p>这个页面还没有历史版本。每次保存后，旧内容会自动存为历史版本。</p>',
+      buttons: [{ label: '关闭' }]
+    });
+  }
+
+  function showVersion(v) {
+    openModal({
+      title: '版本预览',
+      wide: true,
+      body: '<p class="form-hint">' + esc(fmtDate(v.ts)) + ' · ' + esc(v.title) + '</p>' +
+        '<div class="version-preview">' + sanitize(v.content) + '</div>',
+      buttons: [{ label: '关闭' }]
+    });
+  }
+
+  function restoreVersion(page, v) {
+    if (!window.confirm('恢复到 ' + fmtDate(v.ts) + ' 的版本？当前内容会先存为历史版本。')) return;
+    pushVersion(page);
+    page.title = v.title || page.title;
+    page.tags = Array.isArray(v.tags) ? v.tags.slice() : page.tags;
+    page.content = sanitize(v.content || '');
+    page.rating = typeof v.rating === 'number' ? v.rating : page.rating;
+    page.updated = Date.now();
+    page.rev = (page.rev || 1) + 1;
+    writeStorage();
+    closeModal();
+    renderSidebar();
+    renderTopMenus();
+    navigate(page.slug);
+    toast('已恢复到旧版本');
+  }
+
+  function openSettings() {
+    var homeOptions = state.pages.map(function (p) {
+      return '<option value="' + esc(p.slug) + '"' + (p.slug === state.site.home ? ' selected' : '') + '>' + esc(p.title) + '</option>';
+    }).join('');
+    openModal({
+      title: '站点设置',
+      body: '<div class="form-row"><label for="set-title">站点名称</label>' +
+        '<input id="set-title" type="text" value="' + esc(state.site.title) + '"></div>' +
+        '<div class="form-row"><label for="set-subtitle">站点副标题</label>' +
+        '<input id="set-subtitle" type="text" value="' + esc(state.site.subtitle) + '"></div>' +
+        '<div class="form-row"><label for="set-home">首页</label><select id="set-home">' + homeOptions + '</select></div>' +
+        '<p class="form-hint">存储状态：' + (storageOK ? '本地存储可用' : '本地存储不可用，修改可能无法保存') +
+        ' · 共 ' + state.pages.length + ' 个页面 · 上次保存 ' + esc(timeAgo(state.savedAt)) + '</p>',
+      buttons: [
+        { label: '取消' },
+        {
+          label: '保存', primary: true, onClick: function () {
+            var title = $('#set-title').value.trim();
+            if (!title) { toast('站点名称不能为空', 'error'); return false; }
+            state.site.title = title;
+            state.site.subtitle = $('#set-subtitle').value.trim();
+            var home = $('#set-home').value;
+            if (getPage(home)) state.site.home = home;
+            writeStorage();
+            renderAll();
+            toast('站点设置已保存');
+            return true;
+          }
+        }
+      ]
+    });
+  }
+
+  function confirmDelete() {
+    var page = getPage(ui.lastRendered);
+    if (!page) return;
+    if (page.slug === state.site.home) { toast('不能删除首页，请先在「站点设置」里更换首页', 'error'); return; }
+    openModal({
+      title: '删除页面',
+      body: '<p>确定要删除「<strong>' + esc(page.title) + '</strong>」吗？</p>' +
+        '<p class="form-hint">删除后无法恢复，除非你之前导出过备份。建议先使用「导出备份」。</p>',
+      buttons: [
+        { label: '取消' },
+        {
+          label: '删除', danger: true, onClick: function () {
+            state.pages = state.pages.filter(function (p) { return p !== page; });
+            writeStorage();
+            renderSidebar();
+            renderTopMenus();
+            navigate(state.site.home);
+            toast('页面已删除');
+            return true;
+          }
+        }
+      ]
+    });
+  }
+
+  function exportBackup() {
+    var data = {
+      app: APP_ID,
+      version: 1,
+      site: state.site,
+      pages: state.pages,
+      exportedAt: new Date().toISOString()
+    };
+    var name = 'scp-personal-backup-' + fmtShort(Date.now()) + '.json';
+    download(name, JSON.stringify(data, null, 2));
+    toast('备份已导出：' + name);
+  }
+
+  function download(filename, text) {
+    var blob = new Blob([text], { type: 'application/json;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+  }
+
+  function openImportChoice(data) {
+    var when = '未知时间';
+    if (data.exportedAt) {
+      var t = new Date(data.exportedAt).getTime();
+      if (!isNaN(t)) when = fmtDate(t);
+    }
+    openModal({
+      title: '导入备份',
+      body: '<p>备份包含 <strong>' + data.pages.length + '</strong> 个页面，导出于 ' + esc(when) + '。</p>' +
+        '<p class="form-hint">「覆盖」会用备份数据替换当前全部内容；「合并」会保留现有页面，地址重复的页面会自动换一个新地址。</p>',
+      buttons: [
+        { label: '取消' },
+        { label: '合并导入', onClick: function () { importData(data, 'merge'); return true; } },
+        { label: '覆盖导入', danger: true, onClick: function () { importData(data, 'replace'); return true; } }
+      ]
+    });
+  }
+
+  function importData(data, mode) {
+    if (mode === 'replace') {
+      var pages = data.pages.map(normalizePage);
+      if (!pages.length) { toast('没有可导入的页面', 'error'); return; }
+      state.pages = pages;
+      if (data.site) {
+        if (data.site.title) state.site.title = String(data.site.title);
+        if (data.site.subtitle) state.site.subtitle = String(data.site.subtitle);
+        state.site.home = data.site.home && getPage(data.site.home) ? data.site.home : pages[0].slug;
+      } else {
+        state.site.home = pages[0].slug;
+      }
+      writeStorage();
+      renderAll();
+      navigate(state.site.home);
+      toast('已覆盖导入 ' + pages.length + ' 个页面');
+    } else {
+      var added = 0;
+      data.pages.forEach(function (raw) {
+        var p = normalizePage(raw);
+        p.slug = uniqueSlug(p.slug);
+        state.pages.push(p);
+        added += 1;
+      });
+      writeStorage();
+      renderAll();
+      toast('已合并导入 ' + added + ' 个页面');
+    }
+  }
+
+  function confirmReset() {
+    openModal({
+      title: '恢复默认内容',
+      body: '<p>这会<strong>清空当前所有页面</strong>，并恢复为初始的示例内容。</p>' +
+        '<p class="form-hint">此操作不可撤销。建议先导出备份。</p>',
+      buttons: [
+        { label: '取消' },
+        { label: '先导出备份', onClick: function () { exportBackup(); return false; } },
+        {
+          label: '确认恢复', danger: true, onClick: function () {
+            try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+            state = defaultState();
+            writeStorage(true);
+            try { history.replaceState(null, '', '#/' + enc(state.site.home)); } catch (e) { location.hash = '#/' + enc(state.site.home); }
+            renderAll();
+            toast('已恢复默认内容');
+            return true;
+          }
+        }
+      ]
+    });
+  }
+
+  function openShortcuts() {
+    openModal({
+      title: '快捷键',
+      body: '<table class="history-table"><tbody>' +
+        '<tr><td><kbd>Ctrl</kbd> + <kbd>E</kbd></td><td>编辑当前页面</td></tr>' +
+        '<tr><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td><td>保存当前编辑</td></tr>' +
+        '<tr><td><kbd>Esc</kbd></td><td>取消编辑 / 关闭对话框</td></tr>' +
+        '<tr><td><kbd>Ctrl</kbd> + <kbd>K</kbd></td><td>聚焦搜索框</td></tr>' +
+        '<tr><td><kbd>Ctrl</kbd> + <kbd>B</kbd> / <kbd>I</kbd> / <kbd>U</kbd></td><td>加粗 / 斜体 / 下划线</td></tr>' +
+        '</tbody></table>',
+      buttons: [{ label: '关闭' }]
+    });
+  }
+
+  function ratingHelp() {
+    openModal({
+      title: '关于评分',
+      body: '<p>评分只是本地的一个小玩具：它记录在页面数据里，不会发送到任何地方，也不会影响其他人。</p>' +
+        '<p>点击 <strong>+</strong> 或 <strong>−</strong> 给自己加分或减分，点 <strong>x</strong> 撤销。评分会随导出备份一起保存。</p>',
+      buttons: [{ label: '知道了' }]
+    });
+  }
+
+  function randomPage() {
+    var list = state.pages.filter(function (p) { return p.slug !== state.site.home && p.tags.indexOf('系统') < 0; });
+    if (!list.length) { toast('还没有可以随机打开的页面'); return; }
+    navigate(list[Math.floor(Math.random() * list.length)].slug);
+  }
+
+  function handleRate(kind) {
+    var page = getPage(ui.lastRendered);
+    if (!page) return;
+    var delta = 0;
+    if (kind === 'up') delta = 1 - page.myVote;
+    else if (kind === 'down') delta = -1 - page.myVote;
+    else if (kind === 'cancel') delta = -page.myVote;
+    page.rating += delta;
+    page.myVote = kind === 'up' ? 1 : (kind === 'down' ? -1 : 0);
+    writeStorage(true);
+    renderRating(page);
+    toast(kind === 'cancel' ? '已取消评分' : '感谢评分');
+  }
+
+  function handleAction(name, el) {
+    if (name !== 'toggle-menu') document.body.classList.remove('menu-open');
+    switch (name) {
+      case 'edit':
+        if (ui.editing) return;
+        startEdit(ui.lastRendered, false);
+        break;
+      case 'new-page':
+        openNewPage(el && el.getAttribute('data-title'));
+        break;
+      case 'export':
+        exportBackup();
+        break;
+      case 'import':
+        $('#import-file').click();
+        break;
+      case 'settings':
+        openSettings();
+        break;
+      case 'reset':
+        confirmReset();
+        break;
+      case 'sync-online':
+        refreshFromPublished();
+        break;
+      case 'history':
+        openHistory();
+        break;
+      case 'tags':
+        openTagEditor();
+        break;
+      case 'print':
+        window.print();
+        break;
+      case 'delete':
+        confirmDelete();
+        break;
+      case 'random':
+        randomPage();
+        break;
+      case 'rate-help':
+        ratingHelp();
+        break;
+      case 'shortcuts':
+        openShortcuts();
+        break;
+      case 'toggle-menu':
+        document.body.classList.toggle('menu-open');
+        break;
+      case 'close-menu':
+        document.body.classList.remove('menu-open');
+        break;
+      default:
+        break;
+    }
+  }
+
+  /* ============================================================
+     9. 搜索
+     ============================================================ */
+  function showSearch(query) {
+    var box = $('#search-results');
+    query = String(query || '').trim();
+    if (!query) { box.hidden = true; box.innerHTML = ''; return; }
+    var lower = query.toLowerCase();
+    var hits = [];
+    state.pages.forEach(function (p) {
+      var titleIdx = p.title.toLowerCase().indexOf(lower);
+      var text = stripTags(p.content);
+      var textIdx = text.toLowerCase().indexOf(lower);
+      if (titleIdx < 0 && textIdx < 0) return;
+      hits.push({ page: p, rank: titleIdx >= 0 ? 0 : 1, text: text, textIdx: textIdx });
+    });
+    hits.sort(function (a, b) { return a.rank - b.rank || b.page.updated - a.page.updated; });
+    box.innerHTML = hits.length ? hits.slice(0, 8).map(function (h) {
+      var snippet = '';
+      if (h.textIdx >= 0) {
+        var start = Math.max(0, h.textIdx - 22);
+        snippet = (start > 0 ? '…' : '') + h.text.slice(start, start + 64) + '…';
+      }
+      return '<a href="#/' + enc(h.page.slug) + '"><span class="sr-title">' + esc(h.page.title) + '</span>' +
+        (snippet ? '<span class="sr-snippet">' + esc(snippet) + '</span>' : '') + '</a>';
+    }).join('') : '<div class="sr-empty">没有找到匹配的页面</div>';
+    box.hidden = false;
+  }
+
+  /* ============================================================
+     10. 事件绑定
+     ============================================================ */
+  function bindEvents() {
+    document.addEventListener('click', function (e) {
+      if (!e.target || !e.target.closest) return;
+      var rateEl = e.target.closest('[data-rate]');
+      if (rateEl) { e.preventDefault(); handleRate(rateEl.getAttribute('data-rate')); return; }
+
+      var actionEl = e.target.closest('[data-action]');
+      if (actionEl) { e.preventDefault(); handleAction(actionEl.getAttribute('data-action'), actionEl); return; }
+
+      var histEl = e.target.closest('[data-hist]');
+      if (histEl) {
+        e.preventDefault();
+        var page = getPage(ui.lastRendered);
+        if (!page) return;
+        var index = parseInt(histEl.getAttribute('data-index'), 10);
+        var version = page.versions[index];
+        if (!version) return;
+        if (histEl.getAttribute('data-hist') === 'view') showVersion(version);
+        else restoreVersion(page, version);
+        return;
+      }
+
+      var anchor = e.target.closest('a');
+      if (anchor && document.body.classList.contains('menu-open') && anchor.closest('#side-bar')) {
+        document.body.classList.remove('menu-open');
+      }
+    });
+
+    window.addEventListener('hashchange', function () {
+      var slug = decodeHash();
+      if (slug === ui.lastRendered) return;
+      if (ui.editing) {
+        if (ui.dirty && !window.confirm('离开当前页面会丢失未保存的修改，确定离开吗？')) {
+          try { history.replaceState(null, '', '#/' + enc(ui.slug)); } catch (e) { /* ignore */ }
+          return;
+        }
+        exitEditorUI();
+      }
+      route();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        if (!$('#modal-root').hidden) { closeModal(); return; }
+        if (ui.editing) { cancelEdit(false); return; }
+        var res = $('#search-results');
+        if (res && !res.hidden) { res.hidden = true; return; }
+      }
+      var mod = e.ctrlKey || e.metaKey;
+      if (!mod) return;
+      var key = (e.key || '').toLowerCase();
+      if (key === 's') {
+        if (ui.editing) { e.preventDefault(); saveEdit(); }
+      } else if (key === 'e') {
+        if (!ui.editing) { e.preventDefault(); handleAction('edit'); }
+      } else if (key === 'k') {
+        e.preventDefault();
+        var input = $('#search-input');
+        if (input) { input.focus(); input.select(); }
+      }
+    });
+
+    window.addEventListener('beforeunload', function (e) {
+      if (ui.editing && ui.dirty) {
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+      }
+    });
+
+    /* 编辑器 */
+    $('#editor-toolbar').addEventListener('click', function (e) {
+      var btn = e.target.closest('button[data-cmd]');
+      if (!btn) return;
+      e.preventDefault();
+      applyCommand(btn.getAttribute('data-cmd'), btn.getAttribute('data-value'));
+    });
+    $('#btn-save').addEventListener('click', saveEdit);
+    $('#btn-cancel').addEventListener('click', function () { cancelEdit(false); });
+    $('#btn-source').addEventListener('click', function () {
+      setEditorMode(ui.mode === 'source' ? 'visual' : 'source');
+    });
+    $('#editor').addEventListener('input', markDirty);
+
+    /* 图片 */
+    $('#image-file').addEventListener('change', function () {
+      var file = this.files && this.files[0];
+      this.value = '';
+      if (!file) return;
+      if (file.size > 1200 * 1024) { toast('图片超过 1.2MB，建议压缩后再插入', 'error'); return; }
+      if (ui.mode !== 'visual') { toast('请先切回可视化模式再插入图片', 'error'); return; }
+      var reader = new FileReader();
+      reader.onload = function () {
+        $('#edit-body').focus();
+        insertHTML('<img src="' + reader.result + '" alt="' + esc(file.name) + '">');
+        markDirty();
+        toast('图片已插入');
+      };
+      reader.readAsDataURL(file);
+    });
+
+    /* 导入 */
+    $('#import-file').addEventListener('change', function () {
+      var file = this.files && this.files[0];
+      this.value = '';
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function () {
+        var data = null;
+        try { data = JSON.parse(String(reader.result)); }
+        catch (e) { toast('文件不是有效的 JSON', 'error'); return; }
+        if (!data || !Array.isArray(data.pages) || !data.pages.length) { toast('备份里没有页面数据', 'error'); return; }
+        openImportChoice(data);
+      };
+      reader.readAsText(file);
+    });
+
+    /* 搜索 */
+    var timer = null;
+    var input = $('#search-input');
+    input.addEventListener('input', function () {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(function () { showSearch(input.value); }, 120);
+    });
+    input.addEventListener('focus', function () { if (input.value.trim()) showSearch(input.value); });
+    $('#search-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var first = $('#search-results a');
+      if (first) { location.hash = first.getAttribute('href'); $('#search-results').hidden = true; }
+      else showSearch(input.value);
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest || !e.target.closest('#search-top-box')) {
+        var box = $('#search-results');
+        if (box) box.hidden = true;
+      }
+    });
+  }
+
+  /* ============================================================
+     11. 启动
+     ============================================================ */
+  function welcome() {
+    var seen = false;
+    try { seen = localStorage.getItem(STORAGE_KEY + '-seen') === '1'; } catch (e) { /* ignore */ }
+    if (seen) return;
+    window.setTimeout(function () {
+      toast('点击右下角的编辑按钮即可修改页面；内容只保存在本机浏览器，记得定期导出备份。', null, 7000);
+      try { localStorage.setItem(STORAGE_KEY + '-seen', '1'); } catch (e) { /* ignore */ }
+    }, 700);
+  }
+
+  function boot() {
+    var hadLocal = load();
+    renderAll();
+    bindEvents();
+    if (!location.hash) {
+      var target = '#/' + enc(state.site.home);
+      try { history.replaceState(null, '', target); }
+      catch (e) { location.hash = target; }
+    }
+    route();
+    updateFab();
+    booting = false;
+    welcome();
+    if (!hadLocal && isHttp()) {
+      fetchPublished().then(function (data) {
+        if (ui.editing) return;
+        state = normalize(data);
+        writeStorage(true);
+        try { history.replaceState(null, '', '#/' + enc(state.site.home)); }
+        catch (e) { /* ignore */ }
+        renderAll();
+        toast('已载入站点线上内容');
+      }).catch(function () { /* 没有 content.json 时使用内嵌内容 */ });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+</body>
+</html>

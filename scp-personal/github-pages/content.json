@@ -1,0 +1,121 @@
+{
+  "app": "scp-personal-wiki",
+  "version": 1,
+  "site": {
+    "title": "SCP基金会",
+    "subtitle": "控制，收容，保护",
+    "home": "main"
+  },
+  "pages": [
+    {
+      "id": "pgd6jtva8zx",
+      "slug": "main",
+      "title": "主页",
+      "tags": [
+        "系统"
+      ],
+      "content": "<div class=\"home-warning\">\n  <div class=\"scp-emblem\" aria-hidden=\"true\"></div>\n  <p class=\"warn-kicker\">警告：基金会资料库属于</p>\n  <p class=\"warn-big\">高度机密</p>\n  <p class=\"warn-sub\">严禁未经授权的人员进行访问<br>肇事者将被监控，定位并处理</p>\n</div>\n<div class=\"home-rule\"></div>\n<p class=\"home-lead\">欢迎来到 <strong>SCP 基金会中文维基 · 个人站</strong>。这里是一份保存在你浏览器里的、可以随意改写的基金会档案库。</p>\n<p>本站复刻了 <a href=\"https://scp-wiki-cn.wikidot.com/\" rel=\"noopener\">SCP 基金会中文分部</a> 的 Sigma-9 版式，但所有页面、修订记录与评分都只属于你一个人。点击右下角的编辑按钮，或页面下方的「编辑」链接，即可开始；第一次来，建议先读 <a href=\"#/guide\">新手指南</a>。</p>\n<h2>本站概览</h2>\n<p>当前收录 <strong>{{页面数}}</strong> 个页面，最近一次更新在 {{最近更新日期}}。所有内容保存在本机浏览器中，不会上传到任何服务器。</p>\n<h2>最近更新</h2>\n{{最近更新}}\n<h2>精品原创</h2>\n<div class=\"content-panel\">\n  <div class=\"panel-heading\">SCP-CN-7421：修订者</div>\n  <div class=\"panel-body\">\n    <p class=\"panel-by\">by 你自己</p>\n    <p>“它从不写新的故事，只是把已有的句子，改得更接近它想要的样子。”</p>\n    <p><a href=\"#/scp-cn-7421\">阅读全文 »</a></p>\n  </div>\n</div>\n<div class=\"content-panel\">\n  <div class=\"panel-heading\">故事：值夜班的第四十一天</div>\n  <div class=\"panel-body\">\n    <p class=\"panel-by\">by 你自己</p>\n    <p>“值班表上只有我的名字。但字迹变了——比我的更工整。”</p>\n    <p><a href=\"#/tale-41\">阅读全文 »</a></p>\n  </div>\n</div>\n<h2>国际站点</h2>\n<table class=\"intl-table\">\n  <tbody>\n    <tr><td><a href=\"https://scp-wiki-cn.wikidot.com/\" rel=\"noopener\">SCP-CN</a></td><td>SCP 基金会中文分部</td></tr>\n    <tr><td><a href=\"https://scp-wiki.wikidot.com/\" rel=\"noopener\">SCP-EN</a></td><td>SCP Foundation · 英文主站</td></tr>\n    <tr><td><a href=\"https://scp-int.wikidot.com/\" rel=\"noopener\">SCP-INT</a></td><td>International Translation Archive</td></tr>\n    <tr><td><a href=\"https://scp-jp.wikidot.com/\" rel=\"noopener\">SCP-JP</a></td><td>SCP財団 · 日语分部</td></tr>\n  </tbody>\n</table>\n<p class=\"home-fine\">本站为非官方个人项目，与 SCP 基金会无隶属关系。站内文字采用 <a href=\"https://creativecommons.org/licenses/by-sa/3.0/deed.zh\" rel=\"noopener\">CC BY-SA 3.0</a> 协议；“SCP 基金会”名称与标志归其各自作者所有。</p>",
+      "created": 1792568622092,
+      "updated": 1795158894092,
+      "rating": 12,
+      "myVote": 0,
+      "rev": 1,
+      "versions": []
+    },
+    {
+      "id": "pumaohxa8zz",
+      "slug": "scp-cn-7421",
+      "title": "SCP-CN-7421 — 修订者",
+      "tags": [
+        "scp",
+        "scp-cn",
+        "euclid",
+        "原创"
+      ],
+      "content": "<p><strong>项目编号：</strong>SCP-CN-7421</p>\n<p><strong>项目等级：</strong>Euclid</p>\n<p><strong>特殊收容措施：</strong>SCP-CN-7421 的现行宿主站点已由基金会网络部接管，域名解析指向 Site-CN-21 三号机房的离线服务器；任何接入该服务器的终端不得连接外部网络。</p>\n<p>每日 04:00，由两名 D 级人员核对全站修订记录。若发现来源不明的修订，应将该页面快照归档后回滚，并对当日值班人员执行一次 B 级记忆删除。</p>\n<p>禁止任何人员在 SCP-CN-7421 的活动页面上连续停留超过 40 分钟。违反者须立即接受心理评估。</p>\n<h2>描述</h2>\n<p>SCP-CN-7421 是一类寄生于维基类网站的无形实体，其存在仅能通过页面修订记录被间接观测。受影响的页面会在无人操作的情况下被改写；改写后的文本在语法上更通顺、在事实上更准确，并且更接近“读者原本想看到的内容”。</p>\n<p>所有被 SCP-CN-7421 修改过的页面均具有以下特征：</p>\n<ul>\n  <li>修订摘要为空，或是一句无法追溯来源的短句，例如“让它更像真的”；</li>\n  <li>修改时间戳与任何已知用户的操作记录均不重合；</li>\n  <li>同一页面连续被修改的间隔逐次缩短，最短记录为 11 秒。</li>\n</ul>\n<p>值得注意的是，SCP-CN-7421 从未创建过新页面，也从未删除任何内容。它只修改已经存在的句子。</p>\n<blockquote>\n  <p>“我们起初以为它是一个自动校对程序。直到它开始修改事故报告里死者的人数。”<br>——项目主管 陈██，访谈记录 7421-03</p>\n</blockquote>\n<h2>附录 7421-A：事件记录</h2>\n<table>\n  <thead>\n    <tr><th>日期</th><th>事件</th><th>结果</th></tr>\n  </thead>\n  <tbody>\n    <tr><td>2026-09-03</td><td>三号机房站点首次出现无来源修订</td><td>页面已回滚，未发现实体</td></tr>\n    <tr><td>2026-09-17</td><td>SCP-CN-7421 修改了一篇尚未发布的草稿</td><td>草稿转移至离线介质</td></tr>\n    <tr><td>2026-10-02</td><td>值班研究员在页面停留 41 分钟后报告“听见有人在删句子”</td><td>已接受记忆删除</td></tr>\n  </tbody>\n</table>\n<h2>附录 7421-B：最后一次修订</h2>\n<p>2026 年 10 月 9 日，SCP-CN-7421 对本站点主页进行了一次修订。修订后的全文为：</p>\n<blockquote><p>“这里什么都没有。请放心地离开。”</p></blockquote>\n<p>该修订已被回滚。回滚后 11 秒，页面再次被改为同一句话。</p>\n<p class=\"footer-wikiwalk-nav\">« <a href=\"#/scp-cn-7420\">SCP-CN-7420</a> | <a href=\"#/scp-cn-7421\">SCP-CN-7421</a> | <a href=\"#/scp-cn-7422\">SCP-CN-7422</a> »</p>",
+      "created": 1794123822092,
+      "updated": 1794944622092,
+      "rating": 37,
+      "myVote": 0,
+      "rev": 1,
+      "versions": []
+    },
+    {
+      "id": "pfdd2j4a900",
+      "slug": "tale-41",
+      "title": "值夜班的第四十一天",
+      "tags": [
+        "故事",
+        "原创"
+      ],
+      "content": "<p class=\"tale-meta\">Site-CN-19 · 夜间值守记录 · 第 41 天</p>\n<p>凌晨两点十七分，走廊尽头的灯又亮了。</p>\n<p>我没有抬头。监控屏幕里，那盏灯下面站着一个人，背对着镜头，正在读墙上的值班表。值班表上只有我的名字。</p>\n<p>我按规程做完了三件事：记录、汇报、等待回复。回复在四十分钟后到达，只有一行字：</p>\n<blockquote><p>“今晚没有安排值班。”</p></blockquote>\n<p>我看了看墙上的值班表。上面还是只有我的名字。但字迹变了——比我的更工整。</p>\n<p>于是我给自己泡了第四十一杯咖啡。杯子底下压着一张便签，是我自己的笔迹，写着四个字：</p>\n<p class=\"tale-note\">别回头。</p>\n<p>我没有回头。我只是把监控又调亮了一格，然后继续等天亮。</p>\n<p class=\"tale-sign\">——记录员 ██，Site-CN-19</p>",
+      "created": 1794642222092,
+      "updated": 1794642222092,
+      "rating": 8,
+      "myVote": 0,
+      "rev": 1,
+      "versions": []
+    },
+    {
+      "id": "p9wgy9ba900",
+      "slug": "guide",
+      "title": "新手指南",
+      "tags": [
+        "指导"
+      ],
+      "content": "<p>这是一份关于本站的使用说明，读完大约需要三分钟。</p>\n<h2>一、这是什么样的站点</h2>\n<p>本站是一个<strong>单文件、纯前端</strong>的 SCP 风格维基：所有页面、修订记录、评分都保存在当前浏览器的 localStorage 里，不上传、不联网、不需要服务器。你可以把它当作自己的写作沙盒，也可以直接改成任何题材的 Wiki。</p>\n<h2>二、如何编辑</h2>\n<ol>\n  <li>打开任意页面，点击右下角的<strong>编辑按钮</strong>，或页面底部的「编辑」链接（快捷键 <kbd>Ctrl</kbd> + <kbd>E</kbd>）。</li>\n  <li>在可视化编辑器里修改标题、标签和正文。工具栏可以加粗、插入标题、引用、列表、表格、图片与折叠块。</li>\n  <li>点击 <strong>保存</strong>（<kbd>Ctrl</kbd> + <kbd>S</kbd>）。每次保存都会生成一个历史版本，可在「历史记录」里查看或恢复。</li>\n  <li>点击 <strong>HTML</strong> 按钮可切换到源码模式，直接写 HTML，适合更复杂的排版。</li>\n</ol>\n<h2>三、页面与导航</h2>\n<p>用左侧边栏或顶部菜单的「工具 → 新建页面」创建新页面，模板分为 SCP 文档、故事、指导三类。页面地址由标题自动生成；正文里可以用 <code>#/页面地址</code> 链接到站内页面，例如 <a href=\"#/scp-cn-7421\">#/scp-cn-7421</a>。指向不存在页面的链接不会报错，打开后会提示你创建它。</p>\n<h2>四、备份与迁移</h2>\n<p>浏览器数据可能因为清理缓存、更换电脑或隐私模式而丢失，<strong>请定期导出备份</strong>：工具 → 导出备份，会得到一个 JSON 文件；在新环境用「导入备份」恢复即可。导入支持「合并」与「覆盖」两种方式。</p>\n<h2>五、快捷操作</h2>\n<table>\n  <thead><tr><th>操作</th><th>快捷键 / 位置</th></tr></thead>\n  <tbody>\n    <tr><td>编辑当前页面</td><td><kbd>Ctrl</kbd> + <kbd>E</kbd></td></tr>\n    <tr><td>保存</td><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td></tr>\n    <tr><td>取消编辑</td><td><kbd>Esc</kbd></td></tr>\n    <tr><td>搜索</td><td><kbd>Ctrl</kbd> + <kbd>K</kbd></td></tr>\n    <tr><td>打印 / 存为 PDF</td><td>页面底部「打印」</td></tr>\n  </tbody>\n</table>\n<h2>六、写作建议</h2>\n<p>一篇标准的 SCP 文档通常包含：项目编号、项目等级、特殊收容措施、描述，以及若干附录（事件记录、访谈、实验日志）。写作时尽量保持临床、克制、公文化的语气——恐惧来自细节的精确，而不是形容词的堆叠。</p>\n<blockquote><p>控制，收容，保护。</p></blockquote>\n<h2>七、注意事项</h2>\n<ul>\n  <li>数据只存在于当前浏览器，换浏览器、换设备都看不到。</li>\n  <li>清理浏览数据（Cookie / 站点数据）会一并清除本站内容。</li>\n  <li>无痕模式下关闭窗口即丢失，请务必先导出备份。</li>\n  <li>插入的图片会以 base64 形式写入本地存储，过大的图片可能超出容量限制。</li>\n</ul>",
+      "created": 1793432622092,
+      "updated": 1794901422092,
+      "rating": 15,
+      "myVote": 0,
+      "rev": 1,
+      "versions": []
+    },
+    {
+      "id": "pn3dklba900",
+      "slug": "about",
+      "title": "关于本站",
+      "tags": [
+        "指导"
+      ],
+      "content": "<p>这是一个私人性质的 SCP 风格维基，用于存放原创文档、故事与设定，也是一个可以随意改写的写作沙盒。</p>\n<h2>关于版式</h2>\n<p>页面版式复刻自 SCP 基金会中文分部的 <strong>Sigma-9</strong> 主题（由 Aelanna 设计，Dr Devan、MScarlet、Sekai_s 等维护），遵循 <a href=\"https://creativecommons.org/licenses/by-sa/3.0/deed.zh\" rel=\"noopener\">CC BY-SA 3.0</a> 协议。站内的 SCP 标志、侧栏图标等素材版权归 SCP 基金会及其作者所有，此处仅作个人学习与致敬之用。</p>\n<h2>关于技术</h2>\n<p>整个站点是一个单独的 HTML 文件，没有任何外部依赖：样式、脚本、图标都内嵌在文件里。内容保存在浏览器 localStorage 中，编辑、版本历史、评分、搜索、导入导出全部在本地完成，断网也能正常使用。</p>\n<h2>免责声明</h2>\n<p>本站与 SCP 基金会官方及中文分部无隶属关系，不代表其立场。站内一切异常项目、组织与人物均为虚构。</p>\n<h2>相关链接</h2>\n<ul>\n  <li><a href=\"https://scp-wiki-cn.wikidot.com/\" rel=\"noopener\">SCP 基金会中文分部</a></li>\n  <li><a href=\"https://scp-wiki.wikidot.com/\" rel=\"noopener\">SCP Foundation（英文主站）</a></li>\n  <li><a href=\"https://scp-int.wikidot.com/\" rel=\"noopener\">SCP 国际翻译站</a></li>\n</ul>",
+      "created": 1793000622092,
+      "updated": 1794728622092,
+      "rating": 6,
+      "myVote": 0,
+      "rev": 1,
+      "versions": []
+    },
+    {
+      "id": "pbacq85a900",
+      "slug": "all",
+      "title": "所有页面",
+      "tags": [
+        "系统"
+      ],
+      "content": "<p>本站目前共 <strong>{{页面数}}</strong> 个页面，按类型分组如下。点击标题即可打开；所有页面都可以编辑。</p>\n{{目录}}",
+      "created": 1794901422092,
+      "updated": 1795031022092,
+      "rating": 3,
+      "myVote": 0,
+      "rev": 1,
+      "versions": []
+    },
+    {
+      "id": "pebs297a900",
+      "slug": "recent",
+      "title": "最近更新",
+      "tags": [
+        "系统"
+      ],
+      "content": "<p>以下页面最近被修改过，按更新时间倒序排列。</p>\n{{最近更新}}\n<p class=\"home-fine\">想找点旧东西？可以到 <a href=\"#/all\">所有页面</a> 里翻一翻，或者用右上角的搜索框。</p>",
+      "created": 1794987822092,
+      "updated": 1795117422092,
+      "rating": 2,
+      "myVote": 0,
+      "rev": 1,
+      "versions": []
+    }
+  ],
+  "publishedAt": "2026-11-20T15:43:45+08:00"
+}
