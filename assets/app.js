@@ -532,6 +532,21 @@ async function copyLink() {
   }
 }
 
+async function copyTemplate(button) {
+  const code = button.closest('.copy-block').querySelector('code');
+  try {
+    await navigator.clipboard.writeText(code.textContent);
+    notify('已复制模板');
+  } catch {
+    if (!code.isConnected) return;
+    const range = document.createRange();
+    range.selectNodeContents(code);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    notify('已选中模板，可手动复制');
+  }
+}
+
 const actions = {
   'open-drawer': () => setDrawer(true),
   'close-drawer': () => setDrawer(false),
@@ -550,6 +565,7 @@ const actions = {
     }
   },
   'copy-link': copyLink,
+  'copy-template': copyTemplate,
   print: () => window.print(),
   'reset-checklist': (button) => updateChecklist(button.closest('[data-checklist]')),
   'import-catalog': () => document.querySelector('#catalog-file').click(),

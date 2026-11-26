@@ -177,7 +177,13 @@ function renderBlocks(lines, context, depth = 0) {
     if (FENCE.test(line)) {
       const start = ++i;
       while (i < lines.length && !FENCE.test(lines[i].trim())) i++;
-      parts.push(`<pre><code>${escapeHTML(lines.slice(start, i).join('\n'))}</code></pre>`);
+      const code = `<pre><code>${escapeHTML(lines.slice(start, i).join('\n'))}</code></pre>`;
+      parts.push(line === '```text copy'
+        ? `<div class="copy-block">
+          <div class="copy-block-toolbar"><button class="button button-outline button-small" type="button" data-action="copy-template">${icon('copy')} 复制模板</button></div>
+          ${code}
+        </div>`
+        : code);
       i++;
       continue;
     }

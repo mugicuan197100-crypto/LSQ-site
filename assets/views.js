@@ -155,7 +155,9 @@ function renderToc(item, sections, mobile = false) {
 export function renderArticle(item, learning, items) {
   const sections = parseSections(item.body);
   const completed = learning.completed.has(item.id);
-  const next = items.find((other) => other.id !== item.id && other.platform === item.platform)
+  const position = items.findIndex((other) => other.id === item.id);
+  const next = items.slice(position + 1).find((other) => other.platform === item.platform)
+    ?? items.find((other) => other.id !== item.id && other.platform === item.platform)
     ?? items.find((other) => other.id !== item.id);
   const calculator = item.id === 'shopee-bidding' || item.id === 'cross-border-pricing';
   return `<nav aria-label="面包屑" class="breadcrumbs">
